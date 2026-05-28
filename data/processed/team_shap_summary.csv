@@ -1,0 +1,9 @@
+team,top_feature_1,shap_1,top_feature_2,shap_2,top_feature_3,shap_3
+France,elo_diff,0.532955,home_elo,0.259167,home_goals_avg,0.146111
+England,elo_diff,0.391363,home_elo,0.180746,home_goals_avg,0.060915
+Brazil,elo_diff,0.399555,home_elo,0.097897,form_diff,0.043399
+Argentina,elo_diff,0.506124,home_elo,0.2562,home_goals_avg,0.127883
+Spain,elo_diff,0.517558,home_elo,0.254639,form_diff,0.119306
+Germany,elo_diff,0.279892,home_elo,0.157426,home_goals_avg,0.102403
+Portugal,elo_diff,0.37367,home_elo,0.225696,home_goals_avg,0.19995
+Netherlands,elo_diff,0.445798,home_elo,0.247537,home_goals_avg,0.172949

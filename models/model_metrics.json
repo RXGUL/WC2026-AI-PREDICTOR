@@ -1,0 +1,88 @@
+{
+  "model_type": "xgboost.Booster",
+  "target": "result_encoded",
+  "label_names": {
+    "0": "Away",
+    "1": "Draw",
+    "2": "Home"
+  },
+  "rows_total": 7573,
+  "rows_train": 6058,
+  "rows_test": 1515,
+  "feature_count": 22,
+  "overall_accuracy": 0.4198019801980198,
+  "win_loss_only_accuracy": 0.4902687673772011,
+  "win_loss_test_rows": 1079,
+  "class_distribution_train": {
+    "Away": 1699,
+    "Draw": 1534,
+    "Home": 2825
+  },
+  "class_distribution_test": {
+    "Away": 425,
+    "Draw": 436,
+    "Home": 654
+  },
+  "top_15_feature_importances": [
+    {
+      "feature": "elo_diff",
+      "importance": 3.5968189239501953
+    },
+    {
+      "feature": "form_diff",
+      "importance": 2.1701605319976807
+    },
+    {
+      "feature": "home_elo",
+      "importance": 2.0756778717041016
+    },
+    {
+      "feature": "away_elo",
+      "importance": 2.074803352355957
+    },
+    {
+      "feature": "h2h_rate",
+      "importance": 1.921438455581665
+    },
+    {
+      "feature": "h2h_matches",
+      "importance": 1.8829505443572998
+    },
+    {
+      "feature": "home_form",
+      "importance": 1.837585210800171
+    },
+    {
+      "feature": "away_form",
+      "importance": 1.8273210525512695
+    },
+    {
+      "feature": "away_goals_avg",
+      "importance": 1.7878105640411377
+    },
+    {
+      "feature": "home_goals_avg",
+      "importance": 1.7802438735961914
+    },
+    {
+      "feature": "is_wc_match",
+      "importance": 1.72243070602417
+    },
+    {
+      "feature": "is_wc",
+      "importance": 1.5619714260101318
+    },
+    {
+      "feature": "composure_diff",
+      "importance": 0.0
+    },
+    {
+      "feature": "mentality_diff",
+      "importance": 0.0
+    },
+    {
+      "feature": "squad_value_ratio",
+      "importance": 0.0
+    }
+  ]
+}

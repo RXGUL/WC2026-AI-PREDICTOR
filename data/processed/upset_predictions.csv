@@ -1,0 +1,48 @@
+group,favourite,underdog,upset_prob,elo_gap
+K,Colombia,DR Congo,0.3619,175.77
+I,France,Iraq,0.3597,232.56
+L,Croatia,Ghana,0.3429,236.39
+G,Belgium,New Zealand,0.3374,164.08
+L,England,Ghana,0.3348,280.97
+G,Iran,New Zealand,0.3201,123.37
+L,Croatia,Panama,0.3151,121.11
+G,Belgium,Egypt,0.2981,99.66
+F,Japan,Sweden,0.2958,132.53
+F,Netherlands,Tunisia,0.2903,162.46
+J,Argentina,Jordan,0.2857,263.1
+K,Colombia,Uzbekistan,0.2846,103.26
+E,Ecuador,Ivory Coast,0.2817,110.83
+A,Mexico,South Africa,0.2764,152.28
+K,Portugal,Uzbekistan,0.275,119.78
+E,Germany,Ivory Coast,0.2698,145.78
+K,Portugal,DR Congo,0.2636,192.29
+J,Argentina,Austria,0.257,174.65
+I,France,Senegal,0.2525,139.36
+C,Scotland,Haiti,0.2504,96.21
+A,Mexico,Czech Republic,0.2493,85.62
+B,Canada,Qatar,0.2463,128.23
+B,Canada,Bosnia and Herzegovina,0.244,138.37
+J,Argentina,Algeria,0.2409,175.67
+H,Uruguay,Saudi Arabia,0.2399,145.2
+B,Switzerland,Bosnia and Herzegovina,0.2345,166.39
+J,Austria,Jordan,0.2328,88.45
+H,Uruguay,Cape Verde,0.23,195.83
+H,Spain,Uruguay,0.2284,138.12
+I,France,Norway,0.2256,166.06
+A,South Korea,South Africa,0.2236,140.16
+C,Brazil,Haiti,0.2209,253.23
+J,Algeria,Jordan,0.2176,87.43
+B,Switzerland,Qatar,0.2171,156.25
+C,Morocco,Scotland,0.2161,131.24
+C,Brazil,Scotland,0.2142,157.02
+F,Netherlands,Sweden,0.213,147.53
+L,Panama,Ghana,0.2101,115.28
+E,Ivory Coast,Curaçao,0.2083,153.78
+L,England,Panama,0.2021,165.69
+C,Morocco,Haiti,0.1989,227.45
+F,Japan,Tunisia,0.1957,147.46
+H,Spain,Cape Verde,0.1931,333.95
+I,Senegal,Iraq,0.1923,93.2
+E,Ecuador,Curaçao,0.1813,264.61
+H,Spain,Saudi Arabia,0.1805,283.32
+E,Germany,Curaçao,0.1804,299.56
