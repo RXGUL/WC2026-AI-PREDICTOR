@@ -1,0 +1,71 @@
+timestamp,player,team,old_status,new_status,confidence,summary
+2026-05-31T01:48:43+00:00,Vinicius,Brazil,unknown,fit,high,Vinicius has fully recovered from his hamstring issue and is back with the Brazil squad.
+2026-05-31T01:48:43+00:00,Salah,Egypt,unknown,doubt,medium,Salah is uncertain for the upcoming match due to a fitness issue.
+2026-05-31T01:48:43+00:00,Bellingham,England,unknown,doubt,medium,Bellingham's participation is uncertain pending a late fitness test.
+2026-05-31T01:48:43+00:00,Mbappe,France,unknown,fit,high,Mbappe is available for selection after returning to training following a minor fitness issue.
+2026-05-31T01:48:43+00:00,Musiala,Germany,unknown,injured,high,Musiala is ruled out due to an injury concern.
+2026-05-31T01:48:43+00:00,Altidor,Haiti,unknown,returning,high,Altidor is expected to be available for Haiti after recovering from a knock.
+2026-05-31T01:48:43+00:00,Aymen Hussein,Iraq,unknown,fit,high,Aymen Hussein is fit and available for selection after returning to full training.
+2026-05-31T01:48:43+00:00,Haaland,Norway,unknown,fit,high,Haaland is fit and available for selection.
+2026-05-31T01:48:43+00:00,Pedri,Spain,unknown,doubt,medium,Pedri's fitness is uncertain as Spain assesses his condition following a setback.
+2026-05-31T01:48:43+00:00,Rodri,Spain,unknown,fit,high,Rodri is available and fit for upcoming fixtures.
+2026-05-31T02:02:24+00:00,Messi,Argentina,unknown,doubt,medium,"Messi's fitness for the World Cup is uncertain, but the injury is not considered serious."
+2026-05-31T02:02:24+00:00,Di Maria,Argentina,unknown,injured,medium,Di Maria is currently injured following the Copa America final.
+2026-05-31T02:02:24+00:00,De Paul,Argentina,unknown,injured,high,De Paul is ruled out of pre-tournament friendlies due to a hamstring injury.
+2026-05-31T02:02:24+00:00,Mac Allister,Argentina,unknown,doubt,medium,Mac Allister has experienced an injury scare but is currently being monitored for fitness.
+2026-05-31T02:02:24+00:00,Irvine,Australia,unknown,returning,medium,Irvine is expected back for training camp but has faced challenges with injuries.
+2026-05-31T02:02:24+00:00,Arnautovic,Austria,unknown,doubt,medium,Arnautovic is included in the squad but is still struggling for fitness.
+2026-05-31T02:02:24+00:00,De Bruyne,Belgium,unknown,returning,medium,De Bruyne has returned to training after a long injury layoff but his fitness remains a concern.
+2026-05-31T02:02:24+00:00,Doku,Belgium,unknown,injured,medium,Doku is currently dealing with an injury and his return date is uncertain.
+2026-05-31T02:02:24+00:00,Vinicius,Brazil,fit,injured,medium,Vinicius Jr is currently dealing with an injury that has caused him to miss training.
+2026-05-31T02:02:24+00:00,Rodrygo,Brazil,unknown,injured,high,Rodrygo will miss the tournament with Brazil due to injury.
+2026-05-31T02:02:24+00:00,Endrick,Brazil,unknown,returning,medium,Endrick aims to return to full fitness in September.
+2026-05-31T02:02:24+00:00,Marquinhos,Brazil,unknown,fit,high,Marquinhos is currently fit and not reported to be injured.
+2026-05-31T02:02:24+00:00,Varela,Cape Verde,unknown,injured,medium,Varela has a hamstring injury that may affect his availability.
+2026-05-31T02:02:24+00:00,James Rodriguez,Colombia,unknown,injured,medium,"James Rodriguez has been hospitalized due to severe dehydration, which is not linked to footballing activities."
+2026-05-31T02:02:24+00:00,Cuadrado,Colombia,unknown,fit,high,Juan Cuadrado is set to be called up for the upcoming match.
+2026-05-31T02:02:24+00:00,Kovacic,Croatia,unknown,returning,medium,Kovacic is expected to return to fitness soon according to recent updates.
+2026-05-31T02:02:24+00:00,Gvardiol,Croatia,unknown,injured,medium,"Gvardiol is currently dealing with an injury, and his return date is uncertain."
+2026-05-31T02:02:24+00:00,Caicedo,Ecuador,unknown,doubt,medium,Caicedo's availability is uncertain as Chelsea is concerned about his fitness.
+2026-05-31T02:02:24+00:00,Trezeguet,Egypt,unknown,injured,medium,Trezeguet is currently injured but remains confident in his team's performance.
+2026-05-31T02:02:24+00:00,Kane,England,unknown,doubt,medium,Harry Kane's fitness is uncertain as he is working out but faces a late call for upcoming matches.
+2026-05-31T02:02:24+00:00,Alexander-Arnold,England,unknown,returning,medium,Trent Alexander-Arnold is set to return from injury in time to face Liverpool.
+2026-05-31T02:02:24+00:00,Mbappe,France,fit,doubt,medium,Mbappe is dealing with a left knee sprain but is not expected to require surgery.
+2026-05-31T02:02:24+00:00,Griezmann,France,unknown,injured,high,"Griezmann is currently injured, raising concerns about his fitness for upcoming matches."
+2026-05-31T02:02:24+00:00,Wirtz,Germany,unknown,doubt,medium,Wirtz is among possible absentees due to injury concerns.
+2026-05-31T02:02:24+00:00,Kudus,Ghana,unknown,injured,medium,Kudus is currently dealing with an injury and his return date is uncertain.
+2026-05-31T02:02:24+00:00,Taremi,Iran,unknown,injured,medium,Taremi is dealing with a confirmed thigh strain and has not been training with the team.
+2026-05-31T02:02:24+00:00,Jahanbakhsh,Iran,unknown,injured,medium,Jahanbakhsh is struggling for fitness and has missed international duty and a match.
+2026-05-31T02:02:24+00:00,Aymen Hussein,Iraq,fit,returning,medium,"Aymen Hussein's condition is stable and improving, indicating a potential return to fitness."
+2026-05-31T02:02:24+00:00,Haller,Ivory Coast,unknown,injured,high,Haller has been ruled out of the AFCON due to his health struggles.
+2026-05-31T02:02:24+00:00,Kubo,Japan,unknown,injured,medium,Kubo's hamstring injury raises concerns for his participation in the World Cup.
+2026-05-31T02:02:24+00:00,Minamino,Japan,unknown,injured,high,"Minamino is sidelined due to an ACL tear, impacting Japan's World Cup chances."
+2026-05-31T02:02:24+00:00,Hakimi,Morocco,unknown,doubt,medium,"Hakimi is experiencing an injury scare, causing uncertainty about his availability for upcoming matches."
+2026-05-31T02:02:24+00:00,En-Nesyri,Morocco,unknown,injured,high,En-Nesyri misses out on the World Cup due to injury.
+2026-05-31T02:02:24+00:00,Van Dijk,Netherlands,unknown,doubt,medium,Van Dijk's fitness is uncertain as Liverpool awaits updates on his injury status.
+2026-05-31T02:02:24+00:00,Haaland,Norway,fit,doubt,medium,Haaland's fitness remains uncertain following recent injury updates from Pep Guardiola.
+2026-05-31T02:02:24+00:00,Murillo,Panama,unknown,doubt,medium,Murillo's availability for upcoming matches is uncertain due to an injury.
+2026-05-31T02:02:24+00:00,Almiron,Paraguay,unknown,injured,medium,Almiron has experienced an injury setback and is currently not fit to play.
+2026-05-31T02:02:24+00:00,Leao,Portugal,unknown,injured,high,Rafael Leão has been ruled out of the Portugal squad due to injury.
+2026-05-31T02:02:24+00:00,Vitinha,Portugal,unknown,doubt,medium,Luis Enrique is unsure if Vitinha will be fit for the UCL semifinals.
+2026-05-31T02:02:24+00:00,Muntari,Qatar,unknown,doubt,medium,Muntari is currently a doubt for the upcoming match due to injury concerns.
+2026-05-31T02:02:24+00:00,Boudiaf,Qatar,unknown,returning,high,Boudiaf has returned from injury ahead of the match against Persepolis.
+2026-05-31T02:02:24+00:00,Al-Dawsari,Saudi Arabia,unknown,injured,high,Al-Dawsari will miss the remainder of the Club World Cup due to injury.
+2026-05-31T02:02:24+00:00,Al-Shahrani,Saudi Arabia,unknown,returning,medium,Al-Shahrani is back after undergoing surgery for a serious injury sustained during the World Cup.
+2026-05-31T02:02:24+00:00,Son,South Korea,unknown,doubt,medium,Son is facing a late fitness call ahead of the match against Manchester United.
+2026-05-31T02:02:24+00:00,Lee Kang-in,South Korea,unknown,injured,medium,Lee Kang-in is currently sidelined due to injury ahead of the World Cup.
+2026-05-31T02:02:24+00:00,Hwang Hee-chan,South Korea,unknown,injured,high,Hwang Hee-chan is out for weeks due to a calf injury.
+2026-05-31T02:02:24+00:00,Rodri,Spain,fit,doubt,medium,Rodri is currently a doubt for upcoming matches due to an injury setback.
+2026-05-31T02:02:24+00:00,Akanji,Switzerland,unknown,fit,high,Akanji has no injury and will resume training this week.
+2026-05-31T02:02:24+00:00,Slimane,Tunisia,unknown,injured,high,Slimane is currently injured and has joined the casualty list for his team.
+2026-05-31T02:02:24+00:00,Calhanoglu,Turkey,unknown,injured,medium,Calhanoglu is currently dealing with a new injury that raises concerns about his fitness.
+2026-05-31T02:02:24+00:00,Pulisic,United States,unknown,doubt,medium,Pulisic is currently in doubt for the upcoming match due to ongoing injury recovery.
+2026-05-31T02:02:24+00:00,McKennie,United States,unknown,injured,high,McKennie is omitted from the USMNT roster due to injury concerns.
+2026-05-31T02:02:24+00:00,Weah,United States,unknown,injured,medium,Weah is currently dealing with a thigh injury and is working to recover for upcoming matches.
+2026-05-31T02:02:24+00:00,Valverde,Uruguay,unknown,injured,medium,Valverde is currently dealing with a traumatic brain injury following an altercation with a teammate.
+2026-05-31T02:02:24+00:00,Nunez,Uruguay,unknown,injured,medium,Nunez is experiencing a slight regression in his injury comeback.
+2026-05-31T02:02:24+00:00,Bentancur,Uruguay,unknown,returning,medium,Bentancur is back in training and ahead of schedule for his return.
+2026-05-31T02:02:24+00:00,Shomurodov,Uzbekistan,unknown,fit,high,"Shomurodov has been called up for the national team, indicating he is fit to play."
+2026-05-31T02:22:09+00:00,Tchouameni,France,unknown,doubt,medium,Tchouameni's availability for the upcoming match is uncertain due to recent injury updates.
+2026-05-31T02:22:09+00:00,Jamal Musiala,Germany,doubt,returning,medium,Musiala is making progress in his recovery but is still not fully fit ahead of the World Cup.
+2026-05-31T02:22:09+00:00,Cody Fajardo,Panama,injured,fit,high,"Cody Fajardo is set to face his former team, indicating he is fit to play."
