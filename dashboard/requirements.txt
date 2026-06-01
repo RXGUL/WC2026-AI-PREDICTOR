@@ -1,0 +1,11 @@
+streamlit
+plotly
+pandas
+numpy
+xgboost
+shap
+openai
+python-dotenv
+scikit-learn
+requests
+feedparser
