@@ -5,6 +5,7 @@ import sys
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 LOCAL_READABLE_DASHBOARD_DEPS = PROJECT_ROOT / "dashboard_deps"
+LOCAL_PYDEPS = PROJECT_ROOT / ".codex_pydeps"
 
 
 def package_is_readable(path: Path, package: str) -> bool:
@@ -29,6 +30,8 @@ else:
     sys.path = [path for path in sys.path if str(Path(path).resolve()) != blocked_path]
 if str(PROJECT_ROOT / "src") not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT / "src"))
+if LOCAL_PYDEPS.exists() and str(LOCAL_PYDEPS) not in sys.path:
+    sys.path.insert(0, str(LOCAL_PYDEPS))
 
 import streamlit as st
 
@@ -360,7 +363,7 @@ def load_reports(path: str) -> dict[str, str]:
 
 
 @st.cache_data
-def load_all_data() -> dict[str, object]:
+def load_from_local_files() -> dict[str, object]:
     master_df = load_csv(
         str(DATA_DIR / "master_teams.csv"),
         (
@@ -423,6 +426,68 @@ def load_all_data() -> dict[str, object]:
     }
 
 
+@st.cache_data(ttl=300)
+def load_from_supabase():
+    import requests
+    from dotenv import load_dotenv
+
+    load_dotenv()
+
+    url = os.getenv("SUPABASE_URL")
+    key = os.getenv("SUPABASE_KEY")
+
+    if not url or not key:
+        return load_from_local_files()
+
+    headers = {
+        "apikey": key,
+        "Authorization": f"Bearer {key}",
+        "Content-Type": "application/json",
+    }
+
+    try:
+        # Trophy predictions
+        r1 = requests.get(
+            f"{url}/rest/v1/trophy_predictions"
+            "?select=*&order=trophy_probability.desc",
+            headers=headers,
+            timeout=10,
+        )
+        trophy_df = pd.DataFrame(r1.json())
+
+        # Analyst reports
+        r2 = requests.get(
+            f"{url}/rest/v1/analyst_reports"
+            "?select=team,report_text",
+            headers=headers,
+            timeout=10,
+        )
+        reports = {r["team"]: r["report_text"] for r in r2.json()}
+
+        # Player status
+        r3 = requests.get(
+            f"{url}/rest/v1/player_status?select=*",
+            headers=headers,
+            timeout=10,
+        )
+        status_df = pd.DataFrame(r3.json())
+
+        # Change log
+        r4 = requests.get(
+            f"{url}/rest/v1/change_log"
+            "?select=*&order=logged_at.desc&limit=100",
+            headers=headers,
+            timeout=10,
+        )
+        changes_df = pd.DataFrame(r4.json())
+
+        return trophy_df, reports, status_df, changes_df
+
+    except Exception as e:
+        st.warning(f"Supabase REST failed: {e}. Loading from local files.")
+        return load_from_local_files()
+
+
 @st.cache_data
 def load_player_watchlist() -> tuple[dict[str, list[str]], dict[str, str]]:
     news_fetcher = load_module_from_path("dashboard_news_fetcher", PROJECT_ROOT / "src" / "16_news_fetcher.py")
@@ -467,6 +532,7 @@ def rank_colour(rank: int) -> str:
 def render_sidebar() -> None:
     st.sidebar.title("WC2026 AI Predictor")
     st.sidebar.caption(f"Last updated: {file_updated_at(DATA_DIR / 'trophy_probabilities.csv')}")
+    st.sidebar.caption("Data source: Supabase live database")
     st.sidebar.link_button("GitHub repo", GITHUB_URL)
     st.sidebar.markdown(
         "AI-powered WC2026 prediction system. "
@@ -1535,7 +1601,18 @@ def render_what_if(data: dict[str, object]) -> None:
 
 
 def main() -> None:
-    data = load_all_data()
+    loaded_data = load_from_supabase()
+    if isinstance(loaded_data, tuple):
+        trophy_df, reports, status_df, changes_df = loaded_data
+        if "logged_at" in changes_df.columns and "timestamp" not in changes_df.columns:
+            changes_df["timestamp"] = changes_df["logged_at"]
+        data = load_from_local_files()
+        data["trophy"] = trophy_df
+        data["reports"] = reports
+        data["player_status"] = status_df
+        data["change_log"] = changes_df
+    else:
+        data = loaded_data
     trophy = data["trophy"]
     master = data["master"]
     upsets = data["upsets"]

@@ -83,9 +83,37 @@ ELO_RATINGS_PATH = PROCESSED_DIR / "elo_ratings.csv"
 H2H_STATS_PATH = PROCESSED_DIR / "h2h_stats.csv"
 TEAM_FORM_PATH = PROCESSED_DIR / "team_form.csv"
 TROPHY_PROBABILITIES_PATH = PROCESSED_DIR / "trophy_probabilities.csv"
+CLIMATE_FEATURES_PATH = PROCESSED_DIR / "climate_features.csv"
 
 SIMULATIONS = 10_000
 RANDOM_SEED = 42
+
+TEAM_ALIASES = {
+    "Bosnia and Herzegovina": "Bosnia-Herzegovina",
+    "Bosnia-Herzegovina": "Bosnia-Herzegovina",
+    "Curacao": "Curacao",
+    "Curaçao": "Curacao",
+    "CuraÃ§ao": "Curacao",
+    "CuraÃƒÂ§ao": "Curacao",
+    "Czech Republic": "Czechia",
+    "Czechia": "Czechia",
+}
+TO_ALL_TEAMS_ALIASES = {
+    "Bosnia-Herzegovina": "Bosnia and Herzegovina",
+    "Curacao": "Curaçao",
+    "Curaçao": "Curaçao",
+    "Czechia": "Czech Republic",
+}
+
+
+def canonical_team(team: object) -> str:
+    value = str(team)
+    return TEAM_ALIASES.get(value, value)
+
+
+def tournament_team(team: object) -> str:
+    value = str(team)
+    return TO_ALL_TEAMS_ALIASES.get(value, value)
 
 
 def load_model_and_features():
@@ -150,7 +178,13 @@ def load_team_data():
                 "team_a_win_rate": float(row.team_a_win_rate),
             }
 
-    return elo_lookup, master_lookup, master_averages, form_lookup, h2h_lookup
+    climate_lookup = {}
+    if CLIMATE_FEATURES_PATH.exists():
+        climate = pd.read_csv(CLIMATE_FEATURES_PATH)
+        climate["team_key"] = climate["team"].map(canonical_team)
+        climate_lookup = climate.set_index("team_key").to_dict(orient="index")
+
+    return elo_lookup, master_lookup, master_averages, form_lookup, h2h_lookup, climate_lookup
 
 
 def master_value(team_data: dict, master_averages: dict, key: str, default: float = 0.0) -> float:
@@ -176,6 +210,7 @@ def build_feature_row(
     master_averages: dict,
     form_lookup: dict[str, dict],
     h2h_lookup: dict[frozenset, dict],
+    climate_lookup: dict[str, dict],
 ) -> dict:
     home_elo = float(elo_lookup.get(home_team, 1500))
     away_elo = float(elo_lookup.get(away_team, 1500))
@@ -183,6 +218,8 @@ def build_feature_row(
     away_master = master_lookup.get(away_team, {})
     home_form = form_lookup.get(home_team, {})
     away_form = form_lookup.get(away_team, {})
+    home_climate = climate_lookup.get(canonical_team(home_team), {})
+    away_climate = climate_lookup.get(canonical_team(away_team), {})
     h2h_rate, h2h_matches = h2h_for_home(h2h_lookup, home_team, away_team)
 
     home_form_score = number(home_form.get("form_score", feature_means.get("home_form", 50)), 50)
@@ -224,7 +261,34 @@ def build_feature_row(
             "availability_diff": master_value(home_master, master_averages, "availability_score")
             - master_value(away_master, master_averages, "availability_score"),
             "is_wc_match": 1,
+            "home_temp_disadvantage": number(
+                home_climate.get("temp_disadvantage", feature_means.get("home_temp_disadvantage", 0)), 0
+            ),
+            "home_altitude_disadvantage": number(
+                home_climate.get("altitude_disadvantage", feature_means.get("home_altitude_disadvantage", 0)), 0
+            ),
+            "home_humidity_factor": number(
+                home_climate.get("humidity_factor", feature_means.get("home_humidity_factor", 0)), 0
+            ),
+            "home_climate_advantage": number(
+                home_climate.get("climate_net_advantage", feature_means.get("home_climate_advantage", 0)), 0
+            ),
+            "away_temp_disadvantage": number(
+                away_climate.get("temp_disadvantage", feature_means.get("away_temp_disadvantage", 0)), 0
+            ),
+            "away_altitude_disadvantage": number(
+                away_climate.get("altitude_disadvantage", feature_means.get("away_altitude_disadvantage", 0)), 0
+            ),
+            "away_humidity_factor": number(
+                away_climate.get("humidity_factor", feature_means.get("away_humidity_factor", 0)), 0
+            ),
+            "away_climate_advantage": number(
+                away_climate.get("climate_net_advantage", feature_means.get("away_climate_advantage", 0)), 0
+            ),
         }
+    )
+    values["climate_advantage_diff"] = (
+        values["home_climate_advantage"] - values["away_climate_advantage"]
     )
 
     return {feature: number(values.get(feature, 0), 0) for feature in feature_columns}
@@ -238,7 +302,7 @@ def precompute_match_probabilities(model, feature_columns: list[str]) -> dict[tu
         .mean(numeric_only=True)
         .fillna(0)
     )
-    elo_lookup, master_lookup, master_averages, form_lookup, h2h_lookup = load_team_data()
+    elo_lookup, master_lookup, master_averages, form_lookup, h2h_lookup, climate_lookup = load_team_data()
 
     ordered_pairs = list(permutations(ALL_TEAMS, 2))
     rows = [
@@ -252,6 +316,7 @@ def precompute_match_probabilities(model, feature_columns: list[str]) -> dict[tu
             master_averages,
             form_lookup,
             h2h_lookup,
+            climate_lookup,
         )
         for home_team, away_team in ordered_pairs
     ]
@@ -291,7 +356,8 @@ def simulate_group_stage(
     qualified = []
     third_place = []
 
-    for teams in WC2026_GROUPS.values():
+    for group_teams in WC2026_GROUPS.values():
+        teams = [tournament_team(team) for team in group_teams]
         table = {team: 0 for team in teams}
 
         for home_team, away_team in combinations(teams, 2):

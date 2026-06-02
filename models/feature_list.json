@@ -20,5 +20,14 @@
   "home_injured",
   "away_injured",
   "availability_diff",
-  "is_wc_match"
+  "is_wc_match",
+  "home_temp_disadvantage",
+  "home_altitude_disadvantage",
+  "home_humidity_factor",
+  "home_climate_advantage",
+  "away_temp_disadvantage",
+  "away_altitude_disadvantage",
+  "away_humidity_factor",
+  "away_climate_advantage",
+  "climate_advantage_diff"
 ]

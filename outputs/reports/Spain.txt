@@ -1,9 +1,7 @@
-Spain enters the 2026 World Cup as a formidable force, boasting the second-highest Elo rating of 1962.94 among all 48 teams. Their impressive squad value underscores a depth of talent, positioning them as one of the tournament’s favorites with a trophy probability of 12.48%. 
+Spain stands poised as a formidable contender in Group H, boasting an impressive Elo rating of 1962.94, placing them second among the 48 teams. Their tactical prowess and rich footballing heritage underpin a trophy probability of 12.48%, which, while promising, underscores the need for caution. 
 
-Key strengths lie in their ability to control matches, reflected in a significant elo_diff of 3.597, illustrating their superior form compared to rivals. However, complacency could be their Achilles' heel; they face an upset risk against teams like Uruguay, Cape Verde, and Saudi Arabia, where their status as favorites could lead to unexpected challenges. 
+Key strengths lie in their elite squad depth and technical ability, which consistently outclass opponents, as reflected in their superior form differential of 2.170. However, the pressure index and composure score are concerning, indicating a vulnerability under high-stakes situations, particularly in knockout phases. The upset risk against teams like Uruguay, Cape Verde, and Saudi Arabia is significant, with probabilities hovering over 18%, hinting that complacency could be their downfall.
 
-While Spain boasts no injuries and an enviable home advantage with an elo rating of 2.076, their lack of composure and mentality metrics raises concerns about handling high-pressure situations. 
+Spain's home Elo advantage of 2.076 could bolster their performance, yet it will be crucial to maintain focus. As they navigate the group stage, their knockout win rate remains an alarming zero, a statistic that simply cannot be ignored. 
 
-In summary, Spain's blend of talent and tactical prowess makes them a serious contender. Yet, they must navigate potential pitfalls carefully. 
-
-**Bold verdict: If Spain can maintain focus and composure, they are poised for a deep run and a shot at the trophy.**
+**In the pursuit of glory, Spain must conquer their mental hurdles or risk falling short of their aspirations.**

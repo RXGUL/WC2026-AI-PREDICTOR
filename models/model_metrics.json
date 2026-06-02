@@ -9,9 +9,9 @@
   "rows_total": 7573,
   "rows_train": 6058,
   "rows_test": 1515,
-  "feature_count": 22,
-  "overall_accuracy": 0.4198019801980198,
-  "win_loss_only_accuracy": 0.4902687673772011,
+  "feature_count": 31,
+  "overall_accuracy": 0.4171617161716172,
+  "win_loss_only_accuracy": 0.4680259499536608,
   "win_loss_test_rows": 1079,
   "class_distribution_train": {
     "Away": 1699,
@@ -26,63 +26,63 @@
   "top_15_feature_importances": [
     {
       "feature": "elo_diff",
-      "importance": 3.5968189239501953
+      "importance": 4.565017223358154
     },
     {
-      "feature": "form_diff",
-      "importance": 2.1701605319976807
+      "feature": "home_climate_advantage",
+      "importance": 2.335115432739258
     },
     {
       "feature": "home_elo",
-      "importance": 2.0756778717041016
+      "importance": 2.3137450218200684
     },
     {
       "feature": "away_elo",
-      "importance": 2.074803352355957
+      "importance": 2.2482829093933105
+    },
+    {
+      "feature": "away_climate_advantage",
+      "importance": 2.2416272163391113
+    },
+    {
+      "feature": "form_diff",
+      "importance": 2.207083225250244
+    },
+    {
+      "feature": "climate_advantage_diff",
+      "importance": 2.181401014328003
     },
     {
       "feature": "h2h_rate",
-      "importance": 1.921438455581665
+      "importance": 2.1380794048309326
     },
     {
-      "feature": "h2h_matches",
-      "importance": 1.8829505443572998
+      "feature": "away_humidity_factor",
+      "importance": 2.133005142211914
     },
     {
-      "feature": "home_form",
-      "importance": 1.837585210800171
-    },
-    {
-      "feature": "away_form",
-      "importance": 1.8273210525512695
+      "feature": "home_temp_disadvantage",
+      "importance": 2.112612724304199
     },
     {
       "feature": "away_goals_avg",
-      "importance": 1.7878105640411377
+      "importance": 2.0713350772857666
     },
     {
-      "feature": "home_goals_avg",
-      "importance": 1.7802438735961914
+      "feature": "h2h_matches",
+      "importance": 2.06284499168396
     },
     {
-      "feature": "is_wc_match",
-      "importance": 1.72243070602417
+      "feature": "away_form",
+      "importance": 2.0505411624908447
     },
     {
-      "feature": "is_wc",
-      "importance": 1.5619714260101318
+      "feature": "home_altitude_disadvantage",
+      "importance": 2.0455238819122314
     },
     {
-      "feature": "composure_diff",
-      "importance": 0.0
-    },
-    {
-      "feature": "mentality_diff",
-      "importance": 0.0
-    },
-    {
-      "feature": "squad_value_ratio",
-      "importance": 0.0
+      "feature": "home_humidity_factor",
+      "importance": 2.0385758876800537
     }
   ]
 }
