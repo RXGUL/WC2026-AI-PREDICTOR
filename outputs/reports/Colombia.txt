@@ -1,0 +1,7 @@
+Colombia enters the 2026 World Cup with a solid Elo rating of 1868.23, placing them 10th among the 48 participating nations. While their trophy probability sits at a modest 3.02%, this does not fully reflect their potential. The squad exhibits impressive strengths, particularly in their form and home Elo, where they’ve consistently outperformed expectations. With an elo_diff of 3.597, they have the capability to compete fiercely against most teams.
+
+However, Colombia faces significant risks, particularly as they are considered favorites against DR Congo and Uzbekistan, where upset probabilities loom at 36.2% and 28.5%, respectively. Their lack of a squad value and zero scores in composure, mentality, and pressure indices raise concerns about their ability to handle high-stakes situations.
+
+Ultimately, while Colombia boasts talent and has a history of success, their current trajectory suggests they might struggle in the knockout stages. The probability of lifting the trophy remains slim, but with the right momentum, they could defy expectations. 
+
+**Colombia has the talent, but their mental game may hold them back from true glory.**

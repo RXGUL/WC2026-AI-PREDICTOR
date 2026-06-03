@@ -1,0 +1,7 @@
+Sweden enters the 2026 World Cup with a daunting challenge, currently ranked 31st in Elo among 48 teams and holding a mere 0.45% chance of lifting the trophy. Their squad value is non-existent, which raises questions about depth and star power. Despite not having any injuries, the lack of a defined identity is concerning. 
+
+Key strengths include their overall form and home Elo advantage, which could galvanize performances. However, the stark absence of a composure score and pressure index suggests they may struggle under the spotlight. The team has the potential to pull off upsets, particularly against Japan and the Netherlands, where they face probabilities of 29.6% and 21.3% respectively.
+
+Nonetheless, the glaring risk is their inability to translate potential into knockout success, with a 0.00% win rate in that phase hanging over their heads. With an elo_diff of 3.597 and a form_diff of 2.170, they must harness these metrics to assert themselves.
+
+**Verdict: Sweden faces a monumental uphill battle, and anything beyond the group stage will be a remarkable achievement.**
