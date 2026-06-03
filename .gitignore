@@ -9,9 +9,10 @@ __pycache__/
 dashboard_runtime_deps/
 dashboard/streamlit.*.log
 
+outputs/*.png
+outputs/trophy_chart.png
+outputs/climate_impact_chart.png
+outputs/supabase_trophy_chart.png
 outputs/reports/*
-!outputs/reports/Argentina.txt
-!outputs/reports/France.txt
-!outputs/reports/Haiti.txt
-!outputs/reports/Iraq.txt
-!outputs/reports/Spain.txt
+!outputs/reports/all_reports.json
+!outputs/reports/*.txt
