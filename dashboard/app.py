@@ -265,7 +265,7 @@ REPORTS_DIR = PROJECT_ROOT / "outputs" / "reports"
 MODELS_DIR = PROJECT_ROOT / "models"
 GITHUB_URL = "https://github.com/RXGUL/wc2026-ai-predictor"
 FOOTER_TEXT = (
-    "WC2026 AI Predictor · Built by Indraneel Perumal · "
+    "WC2026 AI Predictor · Built by Ragul Velmurugan · "
     "XGBoost + Monte Carlo + GPT-4o + LangGraph · "
     "GitHub: github.com/RXGUL/WC2026-AI-PREDICTOR"
 )
@@ -601,7 +601,7 @@ def render_footer() -> None:
         <div class="footer-text">
         WC2026 AI Predictor &nbsp;·&nbsp;
         XGBoost + Monte Carlo + GPT-4o + LangGraph &nbsp;·&nbsp;
-        Built by Indraneel Perumal &nbsp;·&nbsp;
+        Built by Ragul Velmurugan &nbsp;·&nbsp;
         github.com/RXGUL/WC2026-AI-PREDICTOR
         </div>
         """,
