@@ -518,7 +518,7 @@ def load_reports(path: str) -> dict[str, str]:
 
 
 @st.cache_data
-def load_from_local_files() -> dict[str, object]:
+def load_reference_files() -> dict[str, object]:
     master_df = load_csv(
         str(DATA_DIR / "master_teams.csv"),
         (
@@ -549,10 +549,6 @@ def load_from_local_files() -> dict[str, object]:
         pass
 
     return {
-        "trophy": load_csv(
-            str(DATA_DIR / "trophy_probabilities.csv"),
-            ("team", "trophy_probability", "final_prob", "sf_prob", "qf_prob"),
-        ),
         "master": master_df,
         "elo": load_csv(str(DATA_DIR / "elo_ratings.csv"), ("team", "elo", "matches_played")),
         "upsets": load_csv(
@@ -592,7 +588,9 @@ def load_from_supabase():
     key = os.getenv("SUPABASE_KEY")
 
     if not url or not key:
-        return load_from_local_files()
+        raise RuntimeError(
+            "Missing SUPABASE_URL or SUPABASE_KEY. Refusing to fall back to local trophy CSV."
+        )
 
     headers = {
         "apikey": key,
@@ -608,7 +606,10 @@ def load_from_supabase():
             headers=headers,
             timeout=10,
         )
+        r1.raise_for_status()
         trophy_df = pd.DataFrame(r1.json())
+        if trophy_df.empty or "trophy_probability" not in trophy_df.columns:
+            raise RuntimeError("Supabase returned no trophy prediction rows.")
 
         # Analyst reports
         r2 = requests.get(
@@ -617,6 +618,7 @@ def load_from_supabase():
             headers=headers,
             timeout=10,
         )
+        r2.raise_for_status()
         reports = {r["team"]: r["report_text"] for r in r2.json()}
 
         # Player status
@@ -625,6 +627,7 @@ def load_from_supabase():
             headers=headers,
             timeout=10,
         )
+        r3.raise_for_status()
         status_df = pd.DataFrame(r3.json())
 
         # Change log
@@ -634,13 +637,13 @@ def load_from_supabase():
             headers=headers,
             timeout=10,
         )
+        r4.raise_for_status()
         changes_df = pd.DataFrame(r4.json())
 
         return trophy_df, reports, status_df, changes_df
 
     except Exception as e:
-        st.warning(f"Supabase REST failed: {e}. Loading from local files.")
-        return load_from_local_files()
+        raise RuntimeError(f"Supabase REST failed: {e}") from e
 
 
 @st.cache_data
@@ -686,7 +689,6 @@ def rank_colour(rank: int) -> str:
 
 def render_sidebar() -> None:
     st.sidebar.title("WC2026 AI Predictor")
-    st.sidebar.caption(f"Last updated: {file_updated_at(DATA_DIR / 'trophy_probabilities.csv')}")
     st.sidebar.caption("Data source: Supabase live database")
     st.sidebar.link_button("GitHub repo", GITHUB_URL)
     st.sidebar.markdown(
@@ -907,6 +909,11 @@ def render_trophy_predictions(trophy_df: pd.DataFrame, master: pd.DataFrame, ups
         "trophy_probability",
         ascending=False,
     ).reset_index(drop=True)
+    print(
+        "[dashboard] trophy_df.iloc[0]['trophy_probability'] = "
+        f"{trophy_df.iloc[0]['trophy_probability']}",
+        flush=True,
+    )
 
     upset_df = upset_df.copy()
     upset_df["upset_prob"] = pd.to_numeric(upset_df["upset_prob"], errors="coerce")
@@ -928,8 +935,9 @@ def render_trophy_predictions(trophy_df: pd.DataFrame, master: pd.DataFrame, ups
         else "#2a2a2a"
     )
     trophy_table = full_df.copy()
-    top_team = trophy_df.iloc[0]["team"]
-    top_prob = trophy_df.iloc[0]["trophy_probability"]
+    top_prediction = trophy_table.iloc[0]
+    top_team = top_prediction["Team"]
+    top_prob = top_prediction["trophy_probability"]
     biggest_upset = upset_df.iloc[0]
 
     metric_1, metric_2, metric_3 = st.columns(3)
@@ -1780,18 +1788,20 @@ def render_what_if(data: dict[str, object]) -> None:
 
 
 def main() -> None:
-    loaded_data = load_from_supabase()
-    if isinstance(loaded_data, tuple):
-        trophy_df, reports, status_df, changes_df = loaded_data
-        if "logged_at" in changes_df.columns and "timestamp" not in changes_df.columns:
-            changes_df["timestamp"] = changes_df["logged_at"]
-        data = load_from_local_files()
-        data["trophy"] = trophy_df
-        data["reports"] = reports
-        data["player_status"] = status_df
-        data["change_log"] = changes_df
-    else:
-        data = loaded_data
+    try:
+        trophy_df, reports, status_df, changes_df = load_from_supabase()
+    except RuntimeError as error:
+        st.error(str(error))
+        st.stop()
+
+    if "logged_at" in changes_df.columns and "timestamp" not in changes_df.columns:
+        changes_df["timestamp"] = changes_df["logged_at"]
+    data = load_reference_files()
+    data["trophy"] = trophy_df
+    data["reports"] = reports
+    data["player_status"] = status_df
+    data["change_log"] = changes_df
+
     trophy = data["trophy"]
     master = data["master"]
     upsets = data["upsets"]
