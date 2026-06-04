@@ -224,7 +224,162 @@ st.markdown(
         z-index: 0;
         filter: grayscale(1);
     }
+
+    /* Tab transition celebration overlay */
+    .celebration-banner {
+        position: fixed;
+        bottom: 32px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: linear-gradient(135deg,
+            rgba(198,11,30,0.95), rgba(0,0,0,0.9));
+        color: white;
+        padding: 12px 32px;
+        border-radius: 4px;
+        font-family: 'Bebas Neue', cursive;
+        font-size: 22px;
+        letter-spacing: 6px;
+        border-left: 4px solid #FFD700;
+        border-right: 4px solid #FFD700;
+        z-index: 9999;
+        animation: celebFade 1.2s ease forwards;
+        pointer-events: none;
+        white-space: nowrap;
+    }
+
+    @keyframes celebFade {
+        0%   { opacity: 0; transform: translateX(-50%) translateY(10px); }
+        15%  { opacity: 1; transform: translateX(-50%) translateY(0px); }
+        70%  { opacity: 1; transform: translateX(-50%) translateY(0px); }
+        100% { opacity: 0; transform: translateX(-50%) translateY(-8px); }
+    }
+
+    /* Metric card hover glow */
+    [data-testid="metric-container"]:hover,
+    .metric-card:hover {
+        border-left-color: #FFD700 !important;
+        box-shadow: 0 0 20px rgba(198,11,30,0.3),
+                    inset 0 0 20px rgba(198,11,30,0.05) !important;
+        transition: all 0.3s ease !important;
+    }
+
+    /* Champion card special glow */
+    .champion-glow {
+        animation: championPulse 2.5s ease-in-out infinite;
+    }
+
+    @keyframes championPulse {
+        0%, 100% { box-shadow: 0 0 10px rgba(255,215,0,0.2); }
+        50%       { box-shadow: 0 0 25px rgba(255,215,0,0.5),
+                                0 0 50px rgba(255,215,0,0.1); }
+    }
+
+    /* Upset risk card orange glow */
+    .upset-glow {
+        animation: upsetPulse 2.5s ease-in-out infinite;
+        animation-delay: 1.25s;
+    }
+
+    @keyframes upsetPulse {
+        0%, 100% { box-shadow: 0 0 10px rgba(255,107,53,0.2); }
+        50%       { box-shadow: 0 0 25px rgba(255,107,53,0.5),
+                                0 0 50px rgba(255,107,53,0.1); }
+    }
+
+    /* Tab hover effect */
+    .stTabs [data-baseweb="tab"]:hover {
+        color: #888 !important;
+        background: rgba(255,255,255,0.03) !important;
+        transition: all 0.2s ease !important;
+    }
+
+    /* Smooth content transitions */
+    .stTabs [data-baseweb="tab-panel"] {
+        animation: tabFadeIn 0.4s ease forwards;
+    }
+
+    @keyframes tabFadeIn {
+        from { opacity: 0; transform: translateY(8px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Trophy watermark - CSS only, no image needed */
+    .stApp::after {
+        content: "⚽";
+        position: fixed;
+        right: -60px;
+        top: 50%;
+        transform: translateY(-50%) rotate(-15deg);
+        font-size: 420px;
+        opacity: 0.018;
+        pointer-events: none;
+        z-index: 0;
+        line-height: 1;
+        filter: grayscale(1);
+    }
+
+    .stApp::before {
+        content: "🏆";
+        position: fixed;
+        right: 40px;
+        bottom: 60px;
+        font-size: 180px;
+        opacity: 0.025;
+        pointer-events: none;
+        z-index: 0;
+        transform: rotate(8deg);
+        filter: grayscale(1);
+    }
     </style>
+    <script>
+    const MESSAGES = [
+        "SIUUU!", "VAMOS!", "JOGA BONITO", "GOAL!",
+        "FORZA!", "OLE OLE OLE", "WHAT A STRIKE!",
+        "THE BEAUTIFUL GAME", "INTO THE FINAL THIRD...",
+        "CHAMPIONS ARE MADE HERE", "MAGIC IN MOTION",
+        "FOOTBALL HERITAGE", "QUE GOLAZO!"
+    ];
+
+    let lastTab = null;
+
+    function showCelebration() {
+        const existing = document.querySelector('.celebration-banner');
+        if (existing) existing.remove();
+
+        const msg = MESSAGES[Math.floor(Math.random() * MESSAGES.length)];
+        const banner = document.createElement('div');
+        banner.className = 'celebration-banner';
+        banner.textContent = msg;
+        document.body.appendChild(banner);
+
+        setTimeout(() => {
+            if (banner.parentNode) banner.remove();
+        }, 1400);
+    }
+
+    function watchTabs() {
+        const tabs = document.querySelectorAll(
+            '[data-baseweb="tab"]'
+        );
+        tabs.forEach((tab, i) => {
+            tab.addEventListener('click', () => {
+                if (lastTab !== i) {
+                    lastTab = i;
+                    setTimeout(showCelebration, 100);
+                }
+            });
+        });
+    }
+
+    const observer = new MutationObserver(() => {
+        watchTabs();
+    });
+    observer.observe(document.body, {
+        childList: true, subtree: true
+    });
+
+    setTimeout(watchTabs, 1000);
+    </script>
     """,
     unsafe_allow_html=True,
 )
@@ -609,10 +764,17 @@ def render_footer() -> None:
     )
 
 
-def render_tab1_metric_card(label: str, value: str, detail: str, border_color: str) -> None:
+def render_tab1_metric_card(
+    label: str,
+    value: str,
+    detail: str,
+    border_color: str,
+    css_class: str = "",
+) -> None:
+    class_attr = f"metric-card {css_class}".strip()
     st.markdown(
         f"""
-        <div style="
+        <div class="{class_attr}" style="
             background:#111111;
             border:1px solid #1e1e1e;
             border-left:3px solid {border_color};
@@ -731,12 +893,26 @@ def build_team_shap_frame(team_shap: pd.DataFrame, team: str) -> pd.DataFrame:
     return pd.DataFrame(records)
 
 
-def render_trophy_predictions(trophy: pd.DataFrame, master: pd.DataFrame, upsets: pd.DataFrame) -> None:
-    if trophy.empty or upsets.empty:
+def render_trophy_predictions(trophy_df: pd.DataFrame, master: pd.DataFrame, upset_df: pd.DataFrame) -> None:
+    if trophy_df.empty or upset_df.empty:
         st.warning("Trophy prediction data is still loading.")
         return
 
-    full_df = prepare_trophy_table(trophy, master).sort_values(
+    trophy_df = trophy_df.copy()
+    trophy_df["trophy_probability"] = pd.to_numeric(
+        trophy_df["trophy_probability"],
+        errors="coerce",
+    )
+    trophy_df = trophy_df.sort_values(
+        "trophy_probability",
+        ascending=False,
+    ).reset_index(drop=True)
+
+    upset_df = upset_df.copy()
+    upset_df["upset_prob"] = pd.to_numeric(upset_df["upset_prob"], errors="coerce")
+    upset_df = upset_df.sort_values("upset_prob", ascending=False).reset_index(drop=True)
+
+    full_df = prepare_trophy_table(trophy_df, master).sort_values(
         "trophy_probability",
         ascending=False,
     ).reset_index(drop=True)
@@ -752,16 +928,18 @@ def render_trophy_predictions(trophy: pd.DataFrame, master: pd.DataFrame, upsets
         else "#2a2a2a"
     )
     trophy_table = full_df.copy()
-    champion = trophy_table.iloc[0]
-    biggest_upset = upsets.sort_values("upset_prob", ascending=False).iloc[0]
+    top_team = trophy_df.iloc[0]["team"]
+    top_prob = trophy_df.iloc[0]["trophy_probability"]
+    biggest_upset = upset_df.iloc[0]
 
     metric_1, metric_2, metric_3 = st.columns(3)
     with metric_1:
         render_tab1_metric_card(
             "Predicted champion",
-            champion["Team"],
-            f"{champion['trophy_probability']:.2f}%",
+            top_team,
+            f"{top_prob:.2f}%",
             "#FFD700",
+            "champion-glow",
         )
     with metric_2:
         render_tab1_metric_card(
@@ -769,6 +947,7 @@ def render_trophy_predictions(trophy: pd.DataFrame, master: pd.DataFrame, upsets
             f"{biggest_upset['underdog']} over {biggest_upset['favourite']}",
             f"{biggest_upset['upset_prob']:.1%}",
             "#FF6B35",
+            "upset-glow",
         )
     with metric_3:
         render_tab1_metric_card("Total teams analysed", str(len(ALL_TEAMS)), "", "#444")
@@ -1622,14 +1801,40 @@ def main() -> None:
 
     st.markdown(
         """
-        <h1>WC2026 AI PREDICTOR</h1>
-        <p style="font-family:'Space Mono',monospace;
-                  font-size:10px;letter-spacing:3px;
-                  color:#444;text-transform:uppercase;
-                  margin-bottom:24px">
-          XGBoost · Monte Carlo · GPT-4o · LangGraph Agent ·
-          48 Teams · 10,000 Simulations
-        </p>
+        <div style="position:relative;overflow:hidden;
+             padding:24px 0 8px;margin-bottom:8px">
+
+          <!-- Subtle scanline effect -->
+          <div style="position:absolute;top:0;left:0;right:0;
+               bottom:0;background:repeating-linear-gradient(
+               0deg,transparent,transparent 2px,
+               rgba(255,255,255,0.008) 2px,
+               rgba(255,255,255,0.008) 4px);
+               pointer-events:none;z-index:0"></div>
+
+          <h1 style="position:relative;z-index:1;
+              font-family:'Bebas Neue',cursive;
+              font-size:52px;letter-spacing:6px;
+              color:#fff;margin:0;line-height:1;
+              text-shadow:0 0 40px rgba(198,11,30,0.4)">
+            WC2026 AI PREDICTOR
+          </h1>
+
+          <div style="position:relative;z-index:1;
+               font-family:'Space Mono',monospace;
+               font-size:10px;letter-spacing:4px;
+               color:#333;text-transform:uppercase;
+               margin-top:6px">
+            XGBOOST &nbsp;·&nbsp; MONTE CARLO
+            &nbsp;·&nbsp; GPT-4O &nbsp;·&nbsp;
+            LANGGRAPH AGENT &nbsp;·&nbsp;
+            48 TEAMS &nbsp;·&nbsp; 10,000 SIMULATIONS
+          </div>
+
+          <div style="height:1px;background:linear-gradient(
+               90deg,#C60B1E,#FFD700,#C60B1E);
+               margin-top:16px;opacity:0.6"></div>
+        </div>
         """,
         unsafe_allow_html=True,
     )
