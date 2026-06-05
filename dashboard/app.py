@@ -517,6 +517,29 @@ def load_reports(path: str) -> dict[str, str]:
     return json.loads(report_path.read_text(encoding="utf-8"))
 
 
+@st.cache_data(ttl=60)
+def load_matches():
+    import requests
+    from dotenv import load_dotenv
+
+    load_dotenv()
+    key = os.getenv("FOOTBALL_API_KEY", "")
+    if not key:
+        return None
+    try:
+        headers = {"X-Auth-Token": key}
+        r = requests.get(
+            "https://api.football-data.org/v4/competitions/WC/matches",
+            headers=headers,
+            timeout=10,
+        )
+        if r.status_code == 200:
+            return r.json().get("matches", [])
+        return None
+    except Exception:
+        return None
+
+
 @st.cache_data
 def load_reference_files() -> dict[str, object]:
     master_df = load_csv(
@@ -696,6 +719,15 @@ def render_sidebar() -> None:
         "XGBoost + Monte Carlo + GPT-4o + LangGraph agent."
     )
     render_agent_sidebar_status()
+    st.sidebar.markdown(
+        """
+        <div style="font-family:'Space Mono',monospace;
+        font-size:10px;color:#555;margin-top:8px">
+        Match data: football-data.org
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
 
 def render_agent_sidebar_status() -> None:
@@ -1787,6 +1819,186 @@ def render_what_if(data: dict[str, object]) -> None:
     )
 
 
+def render_match_schedule() -> None:
+    st.markdown(
+        """
+        <h2 style="font-family:'Archivo Black',sans-serif;
+        letter-spacing:3px;text-transform:uppercase;
+        color:#ccc;border-bottom:2px solid #C60B1E;
+        padding-bottom:8px">
+        World Cup 2026 - Match Schedule
+        </h2>
+        <p style="font-family:'Space Mono',monospace;
+        font-size:10px;letter-spacing:2px;color:#444;
+        text-transform:uppercase;margin-top:4px">
+        All 104 matches - Groups A-L - Live updates every 60s
+        </p>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    stage_filter = st.radio(
+        "Filter by stage",
+        ["All", "Group Stage", "Round of 16", "Quarter-finals", "Semi-finals", "Final"],
+        horizontal=True,
+        key="stage_filter",
+    )
+
+    matches = load_matches()
+
+    if matches:
+        from collections import defaultdict
+
+        stage_map = {
+            "Group Stage": "GROUP_STAGE",
+            "Round of 16": "LAST_16",
+            "Quarter-finals": "QUARTER_FINALS",
+            "Semi-finals": "SEMI_FINALS",
+            "Final": "FINAL",
+        }
+
+        if stage_filter != "All":
+            matches = [
+                match
+                for match in matches
+                if match.get("stage") == stage_map.get(stage_filter, "")
+            ]
+
+        grouped = defaultdict(list)
+        for match in matches:
+            date_str = match.get("utcDate", "")[:10]
+            grouped[date_str].append(match)
+
+        if not grouped:
+            st.info("No matches found for this stage.")
+            return
+
+        for date_str in sorted(grouped.keys()):
+            try:
+                date_obj = datetime.strptime(date_str, "%Y-%m-%d")
+                date_label = date_obj.strftime("%A, %B %d")
+            except Exception:
+                date_label = date_str
+
+            st.markdown(
+                f"""
+                <div style="font-family:'Archivo Black',sans-serif;
+                font-size:10px;letter-spacing:3px;color:#555;
+                text-transform:uppercase;margin:16px 0 8px;
+                padding-bottom:4px;border-bottom:0.5px solid #1a1a1a">
+                {html.escape(date_label)}
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+
+            for match in grouped[date_str]:
+                home = match.get("homeTeam", {}).get("name", "TBD")
+                away = match.get("awayTeam", {}).get("name", "TBD")
+                status = match.get("status", "")
+                group = match.get("group", "") or ""
+                venue = match.get("venue", "") or ""
+
+                score = match.get("score", {})
+                full_time = score.get("fullTime", {})
+                home_score = full_time.get("home")
+                away_score = full_time.get("away")
+
+                if status == "FINISHED" and home_score is not None:
+                    score_str = f"{home_score} - {away_score}"
+                    badge_bg = "#1a1a1a"
+                    badge_color = "#555"
+                    badge_text = "FINISHED"
+                    border_color = "#333"
+                elif status in ("IN_PLAY", "PAUSED"):
+                    score_str = (
+                        f"{full_time.get('home', '0')} - "
+                        f"{full_time.get('away', '0')}"
+                    )
+                    badge_bg = "#C60B1E"
+                    badge_color = "#fff"
+                    badge_text = "LIVE"
+                    border_color = "#C60B1E"
+                else:
+                    time_str = match.get("utcDate", "")[11:16]
+                    score_str = "vs"
+                    badge_bg = "#0d1a2d"
+                    badge_color = "#4a9eed"
+                    badge_text = f"{time_str} UTC"
+                    border_color = "#1565C0"
+
+                st.markdown(
+                    f"""
+                    <div style="background:#111;border:0.5px solid #222;
+                    border-left:3px solid {border_color};
+                    border-radius:6px;padding:12px 16px;
+                    margin-bottom:6px;display:flex;
+                    justify-content:space-between;align-items:center;
+                    flex-wrap:wrap;gap:8px">
+                      <div style="font-family:'Space Mono',monospace;
+                      font-size:12px;color:#ccc;min-width:200px">
+                        <span style="color:#888;font-size:10px;
+                        display:block;margin-bottom:2px">
+                        {html.escape(str(group))}
+                        </span>
+                        {html.escape(str(home))}
+                        <span style="color:#C60B1E;margin:0 8px">
+                        {html.escape(score_str)}
+                        </span>
+                        {html.escape(str(away))}
+                      </div>
+                      <div style="display:flex;align-items:center;gap:12px">
+                        <span style="font-size:10px;color:#444">
+                        {html.escape(str(venue)[:30]) if venue else ""}
+                        </span>
+                        <span style="font-size:10px;padding:3px 10px;
+                        border-radius:20px;background:{badge_bg};
+                        color:{badge_color};font-weight:500;
+                        font-family:'Space Mono',monospace;
+                        letter-spacing:1px">
+                        {html.escape(badge_text)}
+                        </span>
+                      </div>
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
+        return
+
+    st.info("Match schedule loads when the tournament begins - June 11, 2026")
+    st.markdown("### Group Stage Preview")
+
+    cols = st.columns(3)
+    for index, (group, teams) in enumerate(WC2026_GROUPS.items()):
+        teams_html = "".join(
+            [
+                f"""
+                <div style="font-family:'Space Mono',monospace;
+                font-size:12px;color:#ccc;padding:3px 0">
+                {html.escape(display_team(team))}
+                </div>
+                """
+                for team in teams
+            ]
+        )
+        with cols[index % 3]:
+            st.markdown(
+                f"""
+                <div style="background:#111;border:0.5px solid #222;
+                border-left:3px solid #C60B1E;border-radius:6px;
+                padding:12px;margin-bottom:8px">
+                <div style="font-family:'Archivo Black',sans-serif;
+                font-size:10px;letter-spacing:3px;color:#555;
+                margin-bottom:8px">
+                GROUP {html.escape(str(group))}
+                </div>
+                {teams_html}
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+
+
 def main() -> None:
     try:
         trophy_df, reports, status_df, changes_df = load_from_supabase()
@@ -1849,12 +2061,13 @@ def main() -> None:
         unsafe_allow_html=True,
     )
 
-    tab1, tab2, tab3, tab4 = st.tabs(
+    tab1, tab2, tab3, tab4, tab5 = st.tabs(
         [
             "Trophy Predictions",
             "Team Deep Dive",
             "Giant Killings",
             "What-if Simulator",
+            "Match Schedule",
         ]
     )
 
@@ -1872,6 +2085,10 @@ def main() -> None:
 
     with tab4:
         render_what_if(data)
+        render_footer()
+
+    with tab5:
+        render_match_schedule()
         render_footer()
 
 
