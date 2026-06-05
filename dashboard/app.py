@@ -35,7 +35,11 @@ if LOCAL_PYDEPS.exists() and str(LOCAL_PYDEPS) not in sys.path:
 
 import streamlit as st
 
-st.set_page_config(page_title="WC2026 AI Predictor", layout="wide")
+st.set_page_config(
+    page_title="WC2026 AI Predictor",
+    page_icon="\u26bd",
+    layout="wide",
+)
 
 st.markdown(
     """
@@ -87,9 +91,10 @@ st.markdown(
     .stTabs [data-baseweb="tab"] {
         font-family: 'Archivo Black', sans-serif !important;
         font-size: 11px !important;
+        font-weight: 400 !important;
         letter-spacing: 3px !important;
         text-transform: uppercase !important;
-        color: #444 !important;
+        color: #888 !important;
         padding: 12px 24px !important;
         border-radius: 0 !important;
         border-right: 1px solid #1a1a1a !important;
@@ -97,15 +102,16 @@ st.markdown(
 
     .stTabs [aria-selected="true"] {
         color: #ffffff !important;
+        font-weight: 700 !important;
         background: rgba(198,11,30,0.1) !important;
         border-top: 3px solid #C60B1E !important;
     }
 
     /* Metric cards */
     [data-testid="metric-container"] {
-        background: #111111 !important;
-        border: 1px solid #1e1e1e !important;
-        border-left: 3px solid #C60B1E !important;
+        background: #0d1117 !important;
+        border: 1px solid #222 !important;
+        border-top: 2px solid #C60B1E !important;
         border-radius: 6px !important;
         padding: 16px !important;
     }
@@ -115,7 +121,7 @@ st.markdown(
         font-size: 9px !important;
         letter-spacing: 3px !important;
         text-transform: uppercase !important;
-        color: #555 !important;
+        color: #999 !important;
     }
 
     [data-testid="metric-container"] [data-testid="stMetricValue"] {
@@ -168,6 +174,29 @@ st.markdown(
         border: 1px solid #1e1e1e !important;
     }
 
+    /* Kill all Streamlit default colored containers */
+    [data-testid="stAlert"] {
+        display: none !important;
+    }
+
+    div[style*="background-color: rgb(255, 243, 205)"],
+    div[style*="background-color: rgb(255, 228, 225)"],
+    div[style*="background-color: rgb(240, 242, 246)"],
+    div[style*="background: rgb(255"] {
+        background-color: transparent !important;
+        border: none !important;
+    }
+
+    /* Dataframe highlight removal */
+    [data-testid="stDataFrame"] td[style*="background"] {
+        background-color: #0d1117 !important;
+    }
+
+    /* Remove any selected row highlight in tables */
+    .stDataFrame tbody tr:hover {
+        background-color: #161b22 !important;
+    }
+
     /* Info/warning boxes */
     .stInfo {
         background: #0d1a1a !important;
@@ -188,7 +217,7 @@ st.markdown(
         font-size: 9px !important;
         letter-spacing: 2px !important;
         text-transform: uppercase !important;
-        color: #333 !important;
+        color: #999 !important;
         text-align: center !important;
         padding: 16px 0 !important;
         border-top: 1px solid #1a1a1a !important;
@@ -252,38 +281,6 @@ st.markdown(
         15%  { opacity: 1; transform: translateX(-50%) translateY(0px); }
         70%  { opacity: 1; transform: translateX(-50%) translateY(0px); }
         100% { opacity: 0; transform: translateX(-50%) translateY(-8px); }
-    }
-
-    /* Metric card hover glow */
-    [data-testid="metric-container"]:hover,
-    .metric-card:hover {
-        border-left-color: #FFD700 !important;
-        box-shadow: 0 0 20px rgba(198,11,30,0.3),
-                    inset 0 0 20px rgba(198,11,30,0.05) !important;
-        transition: all 0.3s ease !important;
-    }
-
-    /* Champion card special glow */
-    .champion-glow {
-        animation: championPulse 2.5s ease-in-out infinite;
-    }
-
-    @keyframes championPulse {
-        0%, 100% { box-shadow: 0 0 10px rgba(255,215,0,0.2); }
-        50%       { box-shadow: 0 0 25px rgba(255,215,0,0.5),
-                                0 0 50px rgba(255,215,0,0.1); }
-    }
-
-    /* Upset risk card orange glow */
-    .upset-glow {
-        animation: upsetPulse 2.5s ease-in-out infinite;
-        animation-delay: 1.25s;
-    }
-
-    @keyframes upsetPulse {
-        0%, 100% { box-shadow: 0 0 10px rgba(255,107,53,0.2); }
-        50%       { box-shadow: 0 0 25px rgba(255,107,53,0.5),
-                                0 0 50px rgba(255,107,53,0.1); }
     }
 
     /* Tab hover effect */
@@ -410,8 +407,11 @@ import os
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
+from dotenv import load_dotenv
 
 from constants import ALL_TEAMS, HOST_NATIONS, WC2026_GROUPS
+
+load_dotenv()
 
 
 DATA_DIR = PROJECT_ROOT / "data" / "processed"
@@ -722,7 +722,7 @@ def render_sidebar() -> None:
     st.sidebar.markdown(
         """
         <div style="font-family:'Space Mono',monospace;
-        font-size:10px;color:#555;margin-top:8px">
+        font-size:10px;color:#999;margin-top:8px">
         Match data: football-data.org
         </div>
         """,
@@ -736,7 +736,7 @@ def render_agent_sidebar_status() -> None:
     if not change_log_path.exists():
         st.sidebar.markdown(
             """
-            <div style="font-family:'Space Mono',monospace;font-size:10px;color:#555;margin-top:16px">
+            <div style="font-family:'Space Mono',monospace;font-size:10px;color:#999;margin-top:16px">
             Agent: Monitoring active
             </div>
             """,
@@ -769,7 +769,7 @@ def render_agent_sidebar_status() -> None:
 
     st.sidebar.markdown(
         f"""
-        <div style="font-family:'Space Mono',monospace;font-size:10px;color:#555;margin-top:16px;line-height:1.7">
+        <div style="font-family:'Space Mono',monospace;font-size:10px;color:#999;margin-top:16px;line-height:1.7">
         {status_html}
         </div>
         """,
@@ -809,10 +809,10 @@ def render_tab1_metric_card(
     st.markdown(
         f"""
         <div class="{class_attr}" style="
-            background:#111111;
-            border:1px solid #1e1e1e;
-            border-left:3px solid {border_color};
-            border-radius:6px;
+            background:#0d1117;
+            border:1px solid #222;
+            border-top:2px solid {border_color};
+            border-radius:8px;
             padding:16px;
             min-height:118px;
         ">
@@ -821,7 +821,7 @@ def render_tab1_metric_card(
                 font-size:9px;
                 letter-spacing:3px;
                 text-transform:uppercase;
-                color:#555;
+                color:#999;
                 margin-bottom:8px;
             ">{label}</div>
             <div style="
@@ -872,7 +872,7 @@ def render_group_stage_bracket(trophy_table: pd.DataFrame) -> None:
             qualifiers = {team for team, _ in ranked_group[:2]}
             team_rows_html = []
             for team, probability in ranked_group:
-                color = "#2d8a2d" if team in qualifiers else "#444"
+                color = "#2d8a2d" if team in qualifiers else "#999"
                 host_badge = (
                     "<span style='color:#C60B1E;font-size:9px;margin-left:6px'>(H)</span>"
                     if team in HOST_NATIONS
@@ -896,7 +896,7 @@ def render_group_stage_bracket(trophy_table: pd.DataFrame) -> None:
                     border-left:3px solid #C60B1E;border-radius:6px;
                     padding:12px;margin-bottom:8px">
                     <div style="font-family:'Archivo Black',sans-serif;
-                    font-size:10px;letter-spacing:3px;color:#555;
+                    font-size:10px;letter-spacing:3px;color:#999;
                     margin-bottom:8px">GROUP {group}</div>
                     {teams_html}
                     </div>
@@ -933,14 +933,30 @@ def render_trophy_predictions(trophy_df: pd.DataFrame, master: pd.DataFrame, ups
         return
 
     trophy_df = trophy_df.copy()
+    print("[dashboard] df_trophy columns:", trophy_df.columns.tolist(), flush=True)
+    probability_column = next(
+        (
+            column
+            for column in ("trophy_probability", "probability", "trophy_prob")
+            if column in trophy_df.columns
+        ),
+        None,
+    )
+    if probability_column is None:
+        st.warning("Trophy prediction data is missing a probability column.")
+        return
+    if probability_column != "trophy_probability":
+        trophy_df["trophy_probability"] = trophy_df[probability_column]
     trophy_df["trophy_probability"] = pd.to_numeric(
         trophy_df["trophy_probability"],
         errors="coerce",
     )
-    trophy_df = trophy_df.sort_values(
+    df_trophy = trophy_df.sort_values(
         "trophy_probability",
         ascending=False,
     ).reset_index(drop=True)
+    trophy_df = df_trophy
+    print(df_trophy.head(5)[["team", "trophy_probability"]], flush=True)
     print(
         "[dashboard] trophy_df.iloc[0]['trophy_probability'] = "
         f"{trophy_df.iloc[0]['trophy_probability']}",
@@ -957,15 +973,26 @@ def render_trophy_predictions(trophy_df: pd.DataFrame, master: pd.DataFrame, ups
     ).reset_index(drop=True)
     full_df["rank"] = range(1, len(full_df) + 1)
     full_df["Rank"] = full_df["rank"]
-    full_df["color"] = full_df["rank"].apply(
-        lambda rank: "#FFD700"
-        if rank <= 3
-        else "#2d8a2d"
-        if rank <= 8
-        else "#1565C0"
-        if rank <= 16
-        else "#2a2a2a"
-    )
+    full_df["color"] = [
+        "#C60B1E"
+        if rank == 1
+        else "#e08000"
+        if rank == 2
+        else "#f0c040"
+        if rank == 3
+        else "#4a9eff"
+        if rank <= 5
+        else "#2a7fd4"
+        if rank <= 10
+        else "#1a5fa0"
+        if rank <= 20
+        else "#2d7a4f"
+        if rank <= 30
+        else "#1f5c38"
+        if rank <= 40
+        else "#4a3f6b"
+        for rank in full_df["rank"]
+    ]
     trophy_table = full_df.copy()
     top_prediction = trophy_table.iloc[0]
     top_team = top_prediction["Team"]
@@ -979,7 +1006,6 @@ def render_trophy_predictions(trophy_df: pd.DataFrame, master: pd.DataFrame, ups
             top_team,
             f"{top_prob:.2f}%",
             "#FFD700",
-            "champion-glow",
         )
     with metric_2:
         render_tab1_metric_card(
@@ -987,10 +1013,9 @@ def render_trophy_predictions(trophy_df: pd.DataFrame, master: pd.DataFrame, ups
             f"{biggest_upset['underdog']} over {biggest_upset['favourite']}",
             f"{biggest_upset['upset_prob']:.1%}",
             "#FF6B35",
-            "upset-glow",
         )
     with metric_3:
-        render_tab1_metric_card("Total teams analysed", str(len(ALL_TEAMS)), "", "#444")
+        render_tab1_metric_card("Total teams analysed", str(len(ALL_TEAMS)), "", "#999")
 
     group_options = ["All Groups"] + [f"Group {letter}" for letter in sorted(WC2026_GROUPS)]
     selected_group = st.selectbox("Group filter", group_options)
@@ -1001,34 +1026,66 @@ def render_trophy_predictions(trophy_df: pd.DataFrame, master: pd.DataFrame, ups
     else:
         display_df = full_df.copy()
 
-    chart_data = display_df.sort_values("trophy_probability", ascending=True).copy()
+    chart_data = full_df.sort_values("trophy_probability", ascending=False).copy()
+    chart_data["rank_position"] = range(1, len(chart_data) + 1)
+    teams = chart_data["Team"].tolist()
+    probs = chart_data["trophy_probability"].tolist()
+    n_teams = len(chart_data)
+    chart_height = n_teams * 28
+    colors = [
+        "#C60B1E"
+        if rank == 1
+        else "#e08000"
+        if rank == 2
+        else "#f0c040"
+        if rank == 3
+        else "#4a9eff"
+        if rank <= 5
+        else "#2a7fd4"
+        if rank <= 10
+        else "#1a5fa0"
+        if rank <= 20
+        else "#2d7a4f"
+        if rank <= 30
+        else "#1f5c38"
+        if rank <= 40
+        else "#4a3f6b"
+        for rank in chart_data["rank_position"]
+    ]
 
-    fig = go.Figure(
-        go.Bar(
-            x=chart_data["trophy_probability"],
-            y=chart_data["Team"],
-            orientation="h",
-            marker_color=chart_data["color"],
-            text=chart_data["trophy_probability"].apply(lambda value: f"{value:.2f}%"),
-            textposition="outside",
-        )
-    )
-    fig.update_traces(cliponaxis=False)
+    fig = go.Figure(go.Bar(
+        x=probs,
+        y=teams,
+        orientation="h",
+        marker_color=colors,
+        text=[f"{p:.2f}%" for p in probs],
+        textposition="outside",
+        textfont=dict(color="#aaa", size=10, family="Space Mono"),
+        hovertemplate="%{y}: %{x:.2f}%<extra></extra>",
+        cliponaxis=False,
+    ))
     fig.update_layout(
-        title="Trophy Probability — WC2026",
-        height=600,
-        xaxis_title="Trophy probability (%)",
-        yaxis_title="",
+        paper_bgcolor="#0a0a0a",
+        plot_bgcolor="#0a0a0a",
+        font=dict(color="#ccc", family="Space Mono"),
+        xaxis=dict(
+            showgrid=False,
+            zeroline=False,
+            showticklabels=False,
+            title="",
+        ),
+        yaxis=dict(
+            showgrid=False,
+            tickfont=dict(color="#ccc", size=11),
+            autorange="reversed",
+        ),
+        margin=dict(l=150, r=80, t=10, b=10),
+        height=chart_height,
         showlegend=False,
-        margin=dict(l=10, r=70, t=70, b=30),
-        paper_bgcolor="rgba(0,0,0,0)",
-        plot_bgcolor="rgba(0,0,0,0)",
-        font=dict(family="Space Mono", color="#888"),
-        title_font=dict(family="Archivo Black", color="#ccc", size=13),
-        xaxis=dict(gridcolor="#1a1a1a", color="#444"),
-        yaxis=dict(gridcolor="#1a1a1a", color="#444"),
+        bargap=0.35,
     )
-    st.plotly_chart(fig, width="stretch")
+    with st.container(height=520):
+        st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
 
     table = trophy_table[
         ["Rank", "Team", "Group", "trophy_probability", "final_prob", "sf_prob", "qf_prob"]
@@ -1072,7 +1129,7 @@ def render_team_deep_dive(data: dict[str, object]) -> None:
     )
 
     if trophy.empty or master.empty or elo.empty:
-        st.warning("Team deep-dive data is still loading.")
+        st.markdown("Team deep-dive data is still loading.")
         return
 
     default_index = ALL_TEAMS.index("Spain") if "Spain" in ALL_TEAMS else 0
@@ -1132,8 +1189,8 @@ def render_team_deep_dive(data: dict[str, object]) -> None:
                 plot_bgcolor="rgba(0,0,0,0)",
                 font=dict(family="Space Mono", color="#888"),
                 title_font=dict(family="Archivo Black", color="#ccc", size=13),
-                xaxis=dict(gridcolor="#1a1a1a", color="#444"),
-                yaxis=dict(gridcolor="#1a1a1a", color="#444"),
+                xaxis=dict(gridcolor="#1a1a1a", color="#999"),
+                yaxis=dict(gridcolor="#1a1a1a", color="#999"),
             )
             st.plotly_chart(feature_fig, width="stretch")
 
@@ -1156,13 +1213,13 @@ def render_team_deep_dive(data: dict[str, object]) -> None:
             st.subheader("AI Analyst Report")
             report = report_for_team(reports, selected_team)
             if report:
-                st.info(report)
+                st.markdown(report)
                 st.markdown(
                     f"<span style='color:#777'>Word count: {len(report.split())}</span>",
                     unsafe_allow_html=True,
                 )
             else:
-                st.info("Report generating...")
+                st.markdown("Report generating...")
 
         st.subheader("Current player status")
         team_status = team_rows(player_status, selected_team)
@@ -1172,23 +1229,52 @@ def render_team_deep_dive(data: dict[str, object]) -> None:
             status_columns = ["player", "status", "confidence", "summary"]
             if "updated_at" in team_status.columns:
                 status_columns.append("updated_at")
-            team_status = team_status[status_columns].copy()
+            df_players = team_status[status_columns].copy()
+            if "updated_at" not in df_players.columns:
+                df_players["updated_at"] = ""
 
-            def colour_status(row: pd.Series) -> list[str]:
-                colours = {
-                    "injured": "background-color: #FDECEA",
-                    "doubt": "background-color: #FFF4E5",
-                    "fit": "background-color: #E8F5E9",
-                    "returning": "background-color: #E3F2FD",
-                }
-                colour = colours.get(str(row.get("status", "")).lower(), "")
-                return [colour] * len(row)
+            status_map = {
+                "unknown": "Unconfirmed",
+                "fit": "✓ Fit",
+                "injured": "✗ Injured",
+                "doubt": "⚠ Doubt",
+                "suspended": "⊘ Suspended",
+            }
+            df_players["status"] = df_players["status"].map(
+                lambda x: status_map.get(str(x).lower(), x)
+            )
 
-            try:
-                status_display = team_status.style.apply(colour_status, axis=1)
-            except AttributeError:
-                status_display = team_status
-            st.dataframe(status_display, width="stretch", hide_index=True)
+            fallback = "No reliable current status could be confirmed from available headlines."
+            df_players["summary"] = df_players["summary"].apply(
+                lambda x: "—" if str(x).strip() == fallback else x
+            )
+
+            conf_map = {
+                "low": "○ Low",
+                "medium": "◑ Medium",
+                "high": "● High",
+            }
+            df_players["confidence"] = df_players["confidence"].map(
+                lambda x: conf_map.get(str(x).lower(), x)
+            )
+
+            df_players["updated_at"] = pd.to_datetime(
+                df_players["updated_at"], errors="coerce"
+            ).dt.strftime("%d %b %Y")
+
+            df_players = df_players.rename(columns={
+                "player": "Player",
+                "status": "Status",
+                "confidence": "Confidence",
+                "summary": "Notes",
+                "updated_at": "Last Updated",
+            })
+
+            st.dataframe(
+                df_players[["Player", "Status", "Confidence", "Notes", "Last Updated"]],
+                use_container_width=True,
+                hide_index=True,
+            )
 
         st.subheader("Recent changes")
         team_changes = team_rows(change_log, selected_team)
@@ -1215,7 +1301,7 @@ def render_giant_killings(upsets: pd.DataFrame) -> None:
     )
 
     if upsets.empty:
-        st.warning("Upset prediction data is still loading.")
+        st.markdown("Upset prediction data is still loading.")
         return
 
     with st.spinner("Loading giant killing radar..."):
@@ -1286,8 +1372,8 @@ def render_giant_killings(upsets: pd.DataFrame) -> None:
                 plot_bgcolor="rgba(0,0,0,0)",
                 font=dict(family="Space Mono", color="#888"),
                 title_font=dict(family="Archivo Black", color="#ccc", size=13),
-                xaxis=dict(gridcolor="#1a1a1a", color="#444", tickformat=".0%"),
-                yaxis=dict(gridcolor="#1a1a1a", color="#444"),
+                xaxis=dict(gridcolor="#1a1a1a", color="#999", tickformat=".0%"),
+                yaxis=dict(gridcolor="#1a1a1a", color="#999"),
             )
             st.plotly_chart(fig, width="stretch")
 
@@ -1305,18 +1391,9 @@ def render_giant_killings(upsets: pd.DataFrame) -> None:
             }
         )
 
-        def highlight_major_upsets(row: pd.Series) -> list[str]:
-            colour = "background-color: #FDECEA" if float(row["Upset%"]) > 0.33 else ""
-            return [colour] * len(row)
-
-        try:
-            upset_display = table.style.apply(highlight_major_upsets, axis=1).format(
-                {"Upset%": "{:.1%}", "ELO gap": "{:.0f}"}
-            )
-        except AttributeError:
-            upset_display = table.copy()
-            upset_display["Upset%"] = upset_display["Upset%"].map(lambda value: f"{value:.1%}")
-            upset_display["ELO gap"] = upset_display["ELO gap"].map(lambda value: f"{value:.0f}")
+        upset_display = table.copy()
+        upset_display["Upset%"] = upset_display["Upset%"].map(lambda value: f"{value:.1%}")
+        upset_display["ELO gap"] = upset_display["ELO gap"].map(lambda value: f"{value:.0f}")
 
         st.dataframe(upset_display, width="stretch", hide_index=True)
 
@@ -1794,15 +1871,14 @@ def render_what_if(data: dict[str, object]) -> None:
         )
         bar_fig.update_layout(
             height=320,
-            xaxis_title="Trophy probability gain",
             yaxis_title="",
             margin=dict(l=10, r=45, t=10, b=25),
             paper_bgcolor="rgba(0,0,0,0)",
             plot_bgcolor="rgba(0,0,0,0)",
             font=dict(family="Space Mono", color="#888"),
             title_font=dict(family="Archivo Black", color="#ccc", size=13),
-            xaxis=dict(gridcolor="#1a1a1a", color="#444"),
-            yaxis=dict(gridcolor="#1a1a1a", color="#444"),
+            xaxis=dict(gridcolor="#1a1a1a", color="#999"),
+            yaxis=dict(gridcolor="#1a1a1a", color="#999"),
         )
         st.plotly_chart(bar_fig, width="stretch")
 
@@ -1819,6 +1895,101 @@ def render_what_if(data: dict[str, object]) -> None:
     )
 
 
+codes = {
+    "Argentina": "AR",
+    "France": "FR",
+    "Brazil": "BR",
+    "England": "EN",
+    "Spain": "ES",
+    "Germany": "DE",
+    "Portugal": "PT",
+    "Netherlands": "NL",
+    "Belgium": "BE",
+    "Uruguay": "UY",
+    "Colombia": "CO",
+    "Mexico": "MX",
+    "USA": "US",
+    "Japan": "JP",
+    "South Korea": "KR",
+    "Australia": "AU",
+    "Morocco": "MA",
+    "Senegal": "SN",
+    "Canada": "CA",
+    "Ecuador": "EC",
+    "Croatia": "HR",
+    "Switzerland": "CH",
+    "Denmark": "DK",
+    "Poland": "PL",
+    "Serbia": "RS",
+    "Turkey": "TR",
+    "Ukraine": "UA",
+    "Austria": "AT",
+    "Hungary": "HU",
+    "Slovakia": "SK",
+    "Czech Republic": "CZ",
+    "Scotland": "SC",
+    "Algeria": "DZ",
+    "Egypt": "EG",
+    "Nigeria": "NG",
+    "Cameroon": "CM",
+    "Ghana": "GH",
+    "Ivory Coast": "CI",
+    "Mali": "ML",
+    "Tunisia": "TN",
+    "DR Congo": "CD",
+    "South Africa": "ZA",
+    "Saudi Arabia": "SA",
+    "Iran": "IR",
+    "Qatar": "QA",
+    "Paraguay": "PY",
+    "Bolivia": "BO",
+    "Venezuela": "VE",
+    "Costa Rica": "CR",
+    "Panama": "PA",
+    "Haiti": "HT",
+    "Jamaica": "JM",
+    "New Zealand": "NZ",
+    "Peru": "PE",
+    "Chile": "CL",
+    "Uzbekistan": "UZ",
+    "Bosnia & Herzegovina": "BA",
+    "Bosnia-Herzegovina": "BA",
+    "T\u00fcrkiye": "TR",
+    "Indonesia": "ID",
+    "Czechia": "CZ",
+    "Cura\u00e7ao": "CW",
+}
+
+
+def country_code(team: str) -> str:
+    team_name = str(team)
+    return codes.get(team_name, team_name[:2].upper())
+
+
+quotes = {
+    ("Mexico", "South Africa"): "Mexico's home crowd roars, but South Africa arrive with nothing to fear and everything to prove.",
+    ("South Korea", "Czechia"): "South Korea's relentless pressing will test a Czech side built on discipline and set pieces.",
+    ("Canada", "Bosnia-Herzegovina"): "Canada's Premier League core faces a Bosnia side hungry to make their tournament mark.",
+    ("Brazil", "Morocco"): "Brazil carry the samba flair, but Morocco's defensive structure has already shocked the world.",
+    ("Argentina", "Canada"): "The reigning champions open against a Canada side that has quietly become a real threat.",
+    ("Spain", "Germany"): "Two philosophies, one pitch - the possession masters against the high-press machine.",
+    ("France", "Belgium"): "Les Bleus and the Red Devils renew one of football's great modern rivalries.",
+    ("Portugal", "USA"): "Portugal's golden generation faces a young American side with genuine belief.",
+    ("England", "Netherlands"): "England seek redemption; the Dutch arrive with attacking talent to unsettle any defence.",
+    ("Japan", "Colombia"): "Japan's organised chaos could expose a Colombia side still finding their tournament rhythm.",
+    ("Uruguay", "Senegal"): "Battle-hardened Uruguay meet an explosive Senegal outfit capable of beating anyone.",
+    ("Ecuador", "Croatia"): "Ecuador's youthful energy collides with Croatia's veteran tournament intelligence.",
+    ("Australia", "Nigeria"): "The Socceroos bring fight and structure; Nigeria bring pace that will terrify any backline.",
+    ("USA", "Serbia"): "America's high-energy press faces Serbia's physicality and dead-ball danger.",
+    ("Switzerland", "Cameroon"): "Switzerland's reliability meets Cameroon's unpredictability in a classic hard-to-call opener.",
+    ("Denmark", "Tunisia"): "Denmark's collective strength is tested by Tunisia's stubborn, well-drilled defensive shape.",
+    ("Poland", "Saudi Arabia"): "Lewandowski hunts goals; Saudi Arabia will look to frustrate and hit on the break.",
+    ("Mexico", "Poland"): "Mexico need a response; Poland need a statement - something has to give.",
+    ("Australia", "Ghana"): "Two nations chasing a last-sixteen dream with contrasting but equally dangerous styles.",
+    ("Qatar", "Panama"): "The hosts meet a Panama side that simply refuses to be overawed by the occasion.",
+}
+
+
 def render_match_schedule() -> None:
     st.markdown(
         """
@@ -1829,7 +2000,7 @@ def render_match_schedule() -> None:
         World Cup 2026 - Match Schedule
         </h2>
         <p style="font-family:'Space Mono',monospace;
-        font-size:10px;letter-spacing:2px;color:#444;
+        font-size:10px;letter-spacing:2px;color:#999;
         text-transform:uppercase;margin-top:4px">
         All 104 matches - Groups A-L - Live updates every 60s
         </p>
@@ -1883,7 +2054,7 @@ def render_match_schedule() -> None:
             st.markdown(
                 f"""
                 <div style="font-family:'Archivo Black',sans-serif;
-                font-size:10px;letter-spacing:3px;color:#555;
+                font-size:10px;letter-spacing:3px;color:#999;
                 text-transform:uppercase;margin:16px 0 8px;
                 padding-bottom:4px;border-bottom:0.5px solid #1a1a1a">
                 {html.escape(date_label)}
@@ -1895,74 +2066,54 @@ def render_match_schedule() -> None:
             for match in grouped[date_str]:
                 home = match.get("homeTeam", {}).get("name", "TBD")
                 away = match.get("awayTeam", {}).get("name", "TBD")
-                status = match.get("status", "")
                 group = match.get("group", "") or ""
                 venue = match.get("venue", "") or ""
-
-                score = match.get("score", {})
-                full_time = score.get("fullTime", {})
-                home_score = full_time.get("home")
-                away_score = full_time.get("away")
-
-                if status == "FINISHED" and home_score is not None:
-                    score_str = f"{home_score} - {away_score}"
-                    badge_bg = "#1a1a1a"
-                    badge_color = "#555"
-                    badge_text = "FINISHED"
-                    border_color = "#333"
-                elif status in ("IN_PLAY", "PAUSED"):
-                    score_str = (
-                        f"{full_time.get('home', '0')} - "
-                        f"{full_time.get('away', '0')}"
+                time_str = match.get("utcDate", "")[11:16]
+                meta_parts = [part for part in (f"{time_str} UTC" if time_str else "", venue, group) if part]
+                meta_line = " &middot; ".join(html.escape(str(part)) for part in meta_parts)
+                home_code = html.escape(country_code(home))
+                away_code = html.escape(country_code(away))
+                quote = html.escape(
+                    quotes.get(
+                        (home, away),
+                        quotes.get(
+                            (away, home),
+                            f"{home} and {away} collide in what promises to be a fascinating tactical battle.",
+                        ),
                     )
-                    badge_bg = "#C60B1E"
-                    badge_color = "#fff"
-                    badge_text = "LIVE"
-                    border_color = "#C60B1E"
-                else:
-                    time_str = match.get("utcDate", "")[11:16]
-                    score_str = "vs"
-                    badge_bg = "#0d1a2d"
-                    badge_color = "#4a9eed"
-                    badge_text = f"{time_str} UTC"
-                    border_color = "#1565C0"
-
-                st.markdown(
-                    f"""
-                    <div style="background:#111;border:0.5px solid #222;
-                    border-left:3px solid {border_color};
-                    border-radius:6px;padding:12px 16px;
-                    margin-bottom:6px;display:flex;
-                    justify-content:space-between;align-items:center;
-                    flex-wrap:wrap;gap:8px">
-                      <div style="font-family:'Space Mono',monospace;
-                      font-size:12px;color:#ccc;min-width:200px">
-                        <span style="color:#888;font-size:10px;
-                        display:block;margin-bottom:2px">
-                        {html.escape(str(group))}
-                        </span>
-                        {html.escape(str(home))}
-                        <span style="color:#C60B1E;margin:0 8px">
-                        {html.escape(score_str)}
-                        </span>
-                        {html.escape(str(away))}
-                      </div>
-                      <div style="display:flex;align-items:center;gap:12px">
-                        <span style="font-size:10px;color:#444">
-                        {html.escape(str(venue)[:30]) if venue else ""}
-                        </span>
-                        <span style="font-size:10px;padding:3px 10px;
-                        border-radius:20px;background:{badge_bg};
-                        color:{badge_color};font-weight:500;
-                        font-family:'Space Mono',monospace;
-                        letter-spacing:1px">
-                        {html.escape(badge_text)}
-                        </span>
-                      </div>
-                    </div>
-                    """,
-                    unsafe_allow_html=True,
                 )
+                card_html = f"""
+                <div style="background:#0d1117;border:1px solid #222;
+                border-left:3px solid #C60B1E;border-radius:8px;
+                padding:12px 14px;margin-bottom:8px">
+                  <div style="display:flex;align-items:center;gap:8px;
+                  flex-wrap:wrap;font-family:'Space Mono',monospace">
+                    <span style="font-size:9px;font-weight:700;
+                    background:#1e1e1e;color:#C60B1E;padding:2px 6px;
+                    border-radius:4px;letter-spacing:1px">{home_code}</span>
+                    <span style="font-size:14px;font-weight:700;color:#fff">
+                    {html.escape(str(home))}
+                    </span>
+                    <span style="font-size:10px;color:#999">vs</span>
+                    <span style="font-size:14px;font-weight:700;color:#fff">
+                    {html.escape(str(away))}
+                    </span>
+                    <span style="font-size:9px;font-weight:700;
+                    background:#1e1e1e;color:#C60B1E;padding:2px 6px;
+                    border-radius:4px;letter-spacing:1px">{away_code}</span>
+                  </div>
+                  <div style="font-family:'Space Mono',monospace;
+                  font-size:10px;color:#999;margin-top:5px">
+                  {meta_line}
+                  </div>
+                  <div style="font-family:'Space Mono',monospace;
+                  font-size:10px;color:#C60B1E;margin-top:5px;
+                  font-style:italic">
+                  {quote}
+                  </div>
+                </div>
+                """
+                st.markdown(card_html, unsafe_allow_html=True)
         return
 
     st.info("Match schedule loads when the tournament begins - June 11, 2026")
@@ -1988,7 +2139,7 @@ def render_match_schedule() -> None:
                 border-left:3px solid #C60B1E;border-radius:6px;
                 padding:12px;margin-bottom:8px">
                 <div style="font-family:'Archivo Black',sans-serif;
-                font-size:10px;letter-spacing:3px;color:#555;
+                font-size:10px;letter-spacing:3px;color:#999;
                 margin-bottom:8px">
                 GROUP {html.escape(str(group))}
                 </div>
@@ -2037,15 +2188,14 @@ def main() -> None:
           <h1 style="position:relative;z-index:1;
               font-family:'Bebas Neue',cursive;
               font-size:52px;letter-spacing:6px;
-              color:#fff;margin:0;line-height:1;
-              text-shadow:0 0 40px rgba(198,11,30,0.4)">
+              color:#fff;margin:0;line-height:1">
             WC2026 AI PREDICTOR
           </h1>
 
           <div style="position:relative;z-index:1;
                font-family:'Space Mono',monospace;
                font-size:10px;letter-spacing:4px;
-               color:#333;text-transform:uppercase;
+               color:#777;text-transform:uppercase;
                margin-top:6px">
             XGBOOST &nbsp;·&nbsp; MONTE CARLO
             &nbsp;·&nbsp; GPT-4O &nbsp;·&nbsp;
