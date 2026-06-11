@@ -1,0 +1,31 @@
+rank,player,team,golden_boot_probability,goals_last_12mo,xg_per90
+1,Erling Haaland,Norway,49.1871,36,0.89
+2,Kylian Mbappe,France,24.5235,32,0.71
+3,Vinicius Jr,Brazil,5.0837,24,0.58
+4,Harry Kane,England,3.7706,28,0.65
+5,Lionel Messi,Argentina,2.6307,18,0.61
+6,Lamine Yamal,Spain,2.3642,18,0.52
+7,Jude Bellingham,England,2.0488,20,0.48
+8,Phil Foden,England,1.5956,22,0.52
+9,Bukayo Saka,England,1.3195,20,0.48
+10,Hwang Hee-chan,South Korea,1.1806,18,0.44
+11,Raul Jimenez,Mexico,0.8237,16,0.42
+12,Julian Alvarez,Argentina,0.7027,22,0.54
+13,Pedri,Spain,0.6508,12,0.31
+14,Cristiano Ronaldo,Portugal,0.626,16,0.45
+15,Hirving Lozano,Mexico,0.5148,14,0.39
+16,Romelu Lukaku,Belgium,0.4785,24,0.58
+17,Neymar,Brazil,0.4705,14,0.49
+18,Antoine Griezmann,France,0.2864,18,0.44
+19,Darwin Nunez,Uruguay,0.2806,20,0.53
+20,Diogo Jota,Portugal,0.2326,20,0.51
+21,Luis Diaz,Colombia,0.2202,18,0.46
+22,Richarlison,Brazil,0.1894,16,0.44
+23,Rodri,Spain,0.1721,8,0.18
+24,Kai Havertz,Germany,0.1676,18,0.44
+25,Donyell Malen,Netherlands,0.1105,18,0.47
+26,Ferran Torres,Spain,0.1034,16,0.41
+27,Memphis Depay,Netherlands,0.0961,14,0.41
+28,Leroy Sane,Germany,0.0893,16,0.42
+29,Radamel Falcao,Colombia,0.0472,10,0.38
+30,Ayoze Perez,Spain,0.0334,14,0.36

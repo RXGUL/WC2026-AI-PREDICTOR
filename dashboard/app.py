@@ -327,6 +327,69 @@ st.markdown(
         transform: rotate(8deg);
         filter: grayscale(1);
     }
+    @media (max-width: 768px) {
+
+        /* 1. Shrink the massive title on mobile */
+        h1, .main-title {
+            font-size: 1.6rem !important;
+            line-height: 1.2 !important;
+        }
+
+        /* 2. Tabs — make them horizontally scrollable so all tabs are reachable */
+        [data-testid="stTabs"] > div:first-child {
+            overflow-x: auto !important;
+            white-space: nowrap !important;
+            -webkit-overflow-scrolling: touch !important;
+            scrollbar-width: none !important;
+            display: flex !important;
+            flex-wrap: nowrap !important;
+        }
+        [data-testid="stTabs"] > div:first-child::-webkit-scrollbar {
+            display: none !important;
+        }
+        [data-testid="stTabs"] button {
+            font-size: 10px !important;
+            padding: 8px 12px !important;
+            white-space: nowrap !important;
+            flex-shrink: 0 !important;
+        }
+
+        /* 3. Fix dataframe/table white background on mobile */
+        [data-testid="stDataFrame"] {
+            background-color: #0d1117 !important;
+        }
+        [data-testid="stDataFrame"] * {
+            background-color: #0d1117 !important;
+            color: #cccccc !important;
+        }
+        iframe[title="st_aggrid"] {
+            background-color: #0d1117 !important;
+        }
+
+        /* 4. Hide Plotly toolbar on mobile — too cluttered */
+        .modebar {
+            display: none !important;
+        }
+
+        /* 5. Plotly charts — contain within screen, no horizontal overflow */
+        [data-testid="stPlotlyChart"] > div {
+            max-width: 100% !important;
+            overflow-x: hidden !important;
+        }
+
+        /* 6. Subtitle line — wrap instead of overflow */
+        .subtitle-bar, [data-testid="stMarkdownContainer"] p {
+            white-space: normal !important;
+            font-size: 9px !important;
+            letter-spacing: 0.5px !important;
+            line-height: 1.8 !important;
+        }
+
+        /* 7. Sidebar collapsed indicator — keep it minimal */
+        [data-testid="collapsedControl"] {
+            top: 10px !important;
+        }
+    }
     </style>
     <script>
     const MESSAGES = [
@@ -1109,6 +1172,23 @@ def render_trophy_predictions(trophy_df: pd.DataFrame, master: pd.DataFrame, ups
             "QF%": st.column_config.NumberColumn("QF%", format="%.2f%%"),
         },
     )
+
+    df_gb = pd.read_csv("data/processed/golden_boot_predictions.csv")
+    st.markdown("###  GOLDEN BOOT PREDICTIONS")
+    df_gb_top10 = df_gb.head(10)[
+        [
+            "rank",
+            "player",
+            "team",
+            "golden_boot_probability",
+            "goals_last_12mo",
+            "xg_per90",
+        ]
+    ].copy()
+    df_gb_top10.columns = ["Rank", "Player", "Team", "GB %", "Goals (12mo)", "xG/90"]
+    df_gb_top10["GB %"] = df_gb_top10["GB %"].apply(lambda x: f"{x:.2f}%")
+    st.dataframe(df_gb_top10, use_container_width=True, hide_index=True)
+
     render_group_stage_bracket(trophy_table)
 
 
@@ -1367,15 +1447,16 @@ def render_giant_killings(upsets: pd.DataFrame) -> None:
                 xaxis_title="Upset probability",
                 yaxis_title="",
                 xaxis_tickformat=".0%",
-                margin=dict(l=10, r=20, t=70, b=35),
+                margin=dict(l=10, r=10, t=30, b=10),
                 paper_bgcolor="rgba(0,0,0,0)",
                 plot_bgcolor="rgba(0,0,0,0)",
                 font=dict(family="Space Mono", color="#888"),
                 title_font=dict(family="Archivo Black", color="#ccc", size=13),
                 xaxis=dict(gridcolor="#1a1a1a", color="#999", tickformat=".0%"),
                 yaxis=dict(gridcolor="#1a1a1a", color="#999"),
+                autosize=True,
             )
-            st.plotly_chart(fig, width="stretch")
+            st.plotly_chart(fig, width="stretch", config={"displayModeBar": False})
 
         table = filtered.reset_index(drop=True).copy()
         table["Rank"] = range(1, len(table) + 1)
