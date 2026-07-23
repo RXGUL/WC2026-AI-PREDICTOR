@@ -3,36 +3,24 @@ import importlib
 import importlib.util
 import sys
 
+import traceback
+
+try:
+    pass  # we'll wrap the rest next
+except Exception as e:
+    st.error(f"Error: {e}")
+    st.code(traceback.format_exc())
+    st.stop()
+
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 LOCAL_READABLE_DASHBOARD_DEPS = PROJECT_ROOT / "dashboard_deps"
 LOCAL_PYDEPS = PROJECT_ROOT / ".codex_pydeps"
 
 
-def package_is_readable(path: Path, package: str) -> bool:
-    try:
-        init_path = path / package / "__init__.py"
-        if not init_path.is_file():
-            return False
-        with init_path.open("rb") as package_file:
-            package_file.read(1)
-        return True
-    except OSError:
-        return False
-
-
-if all(
-    package_is_readable(LOCAL_READABLE_DASHBOARD_DEPS, package)
-    for package in ("streamlit", "pandas", "plotly")
-):
-    sys.path.insert(0, str(LOCAL_READABLE_DASHBOARD_DEPS))
-else:
-    blocked_path = str(LOCAL_READABLE_DASHBOARD_DEPS)
-    sys.path = [path for path in sys.path if str(Path(path).resolve()) != blocked_path]
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+import sys
 if str(PROJECT_ROOT / "src") not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT / "src"))
-if LOCAL_PYDEPS.exists() and str(LOCAL_PYDEPS) not in sys.path:
-    sys.path.insert(0, str(LOCAL_PYDEPS))
-
 import streamlit as st
 
 st.set_page_config(
@@ -481,6 +469,7 @@ DATA_DIR = PROJECT_ROOT / "data" / "processed"
 INJURIES_DIR = PROJECT_ROOT / "data" / "injuries"
 REPORTS_DIR = PROJECT_ROOT / "outputs" / "reports"
 MODELS_DIR = PROJECT_ROOT / "models"
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 GITHUB_URL = "https://github.com/RXGUL/wc2026-ai-predictor"
 FOOTER_TEXT = (
     "WC2026 AI Predictor · Built by Ragul Velmurugan · "
@@ -1173,21 +1162,30 @@ def render_trophy_predictions(trophy_df: pd.DataFrame, master: pd.DataFrame, ups
         },
     )
 
-    df_gb = pd.read_csv("data/processed/golden_boot_predictions.csv")
-    st.markdown("###  GOLDEN BOOT PREDICTIONS")
-    df_gb_top10 = df_gb.head(10)[
-        [
-            "rank",
-            "player",
-            "team",
-            "golden_boot_probability",
-            "goals_last_12mo",
-            "xg_per90",
-        ]
-    ].copy()
-    df_gb_top10.columns = ["Rank", "Player", "Team", "GB %", "Goals (12mo)", "xG/90"]
-    df_gb_top10["GB %"] = df_gb_top10["GB %"].apply(lambda x: f"{x:.2f}%")
-    st.dataframe(df_gb_top10, use_container_width=True, hide_index=True)
+    gb_path = os.path.join(BASE_DIR, "data", "processed", "golden_boot_predictions.csv")
+
+    if os.path.exists(gb_path):
+        df_gb = pd.read_csv(gb_path)
+    else:
+        df_gb = None
+
+    if df_gb is not None:
+        st.markdown("###  GOLDEN BOOT PREDICTIONS")
+        df_gb_top10 = df_gb.head(10)[
+            [
+                "rank",
+                "player",
+                "team",
+                "golden_boot_probability",
+                "goals_last_12mo",
+                "xg_per90",
+            ]
+        ].copy()
+        df_gb_top10.columns = ["Rank", "Player", "Team", "GB %", "Goals (12mo)", "xG/90"]
+        df_gb_top10["GB %"] = df_gb_top10["GB %"].apply(lambda x: f"{x:.2f}%")
+        st.dataframe(df_gb_top10, use_container_width=True, hide_index=True)
+    else:
+        st.info("Golden Boot predictions not available.")
 
     render_group_stage_bracket(trophy_table)
 
