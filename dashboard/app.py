@@ -443,7 +443,12 @@ import plotly.express as px
 import plotly.graph_objects as go
 from dotenv import load_dotenv
 
-from constants import ALL_TEAMS, HOST_NATIONS, WC2026_GROUPS
+try:
+    from constants import ALL_TEAMS, HOST_NATIONS, WC2026_GROUPS
+except ImportError as e:
+    import streamlit as st
+    st.error(f"Cannot import constants: {e}")
+    st.stop()
 
 load_dotenv()
 
@@ -2214,6 +2219,12 @@ def render_match_schedule() -> None:
 
 
 def main() -> None:
+    try:
+        from constants import ALL_TEAMS, HOST_NATIONS, WC2026_GROUPS
+    except Exception as e:
+        st.error(f"Import error: {e}")
+        st.stop()
+
     try:
         trophy_df, reports, status_df, changes_df = load_from_supabase()
     except RuntimeError as error:
