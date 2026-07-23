@@ -1,21 +1,4 @@
 from pathlib import Path
-import importlib
-import importlib.util
-import sys
-
-import traceback
-
-try:
-    pass  # we'll wrap the rest next
-except Exception as e:
-    st.error(f"Error: {e}")
-    st.code(traceback.format_exc())
-    st.stop()
-
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
-LOCAL_READABLE_DASHBOARD_DEPS = PROJECT_ROOT / "dashboard_deps"
-LOCAL_PYDEPS = PROJECT_ROOT / ".codex_pydeps"
-
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 import sys
@@ -479,12 +462,14 @@ FOOTER_TEXT = (
 
 
 def load_module_from_path(module_name: str, path: Path):
+    from importlib import util
+
     if not path.exists():
         return None
-    spec = importlib.util.spec_from_file_location(module_name, path)
+    spec = util.spec_from_file_location(module_name, path)
     if spec is None or spec.loader is None:
         return None
-    module = importlib.util.module_from_spec(spec)
+    module = util.module_from_spec(spec)
     spec.loader.exec_module(module)
     return module
 
@@ -1699,8 +1684,7 @@ def run_whatif_simulation(
         sys.path.insert(0, project_root)
 
     try:
-        _whatif = importlib.import_module("src.whatif_engine")
-        run_whatif = _whatif.run_whatif
+        from src.whatif_engine import run_whatif
     except ModuleNotFoundError:
         return normalize_whatif_result(
             simple_whatif_fallback(selected_team, removed_players, trophy),
